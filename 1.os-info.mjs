@@ -1,3 +1,5 @@
+/* node 1.os-info.mjs */
+
 import {
   arch as _arch,
   availableParallelism as _availableParallelism,

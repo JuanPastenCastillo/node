@@ -1,3 +1,5 @@
+/* node 2.fs-stat.js */
+
 const fs = require("node:fs")
 
 const stats = fs.statSync("./file.txt")
