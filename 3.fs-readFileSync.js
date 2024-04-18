@@ -1,3 +1,5 @@
+/* node 3.fs-readFileSync.js */
+
 const fs = require("node:fs")
 
 console.log("⌛reading first file...")

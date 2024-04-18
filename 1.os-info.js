@@ -1,3 +1,4 @@
+/* node 1.os-info.js */
 const os = require("node:os")
 
 console.log("OS data:")
