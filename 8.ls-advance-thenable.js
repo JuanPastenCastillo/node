@@ -1,4 +1,5 @@
-/* node 8.ls-advance.js */
+/* node 8.ls-advance-thenable.js */
+
 const path = require("node:path")
 const fsPromise = require("node:fs/promises")
 
@@ -12,12 +13,16 @@ let biggerWidth = 0
 
 fsPromise
   .readdir(folder)
-  .then(async (files) => {
+  .then(async (files, index) => {
+    /* Sequential here */
     for (const x of files) {
       const filePath = path.join(folder, x)
 
+      console.log("This will wait:", x)
+
       try {
         const xStat = await fsPromise.stat(filePath)
+        console.log("xStat:", x)
         const options = {
           month: "short",
           day: "2-digit",
@@ -49,6 +54,7 @@ fsPromise
         fileDataArray.push(fileDataObject)
       } catch (errorStat) {
         console.log(false, errorStat)
+        process.exit(1)
       }
     }
 
@@ -64,9 +70,7 @@ fsPromise
   })
   .catch((err) => {
     if (err) {
-      console.log("Error on trying to read the directory", err)
-      return
+      console.log(`Error on trying to read the directory «${folder}»`)
+      process.exit(1)
     }
-
-    console.log("💫Keep running!")
   })
