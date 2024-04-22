@@ -6,35 +6,8 @@
 /* node 8.ls-advance-arguments.js -f=mjs/ -x nonesense_here */
 /* node 8.ls-advance-arguments.js -f=cmj/ -x nonesense_here */
 
-/* Add arguments when the command is executed: 
-- Display only hidden
-- Display only visibles
-- Display everything by default
-*/
-
 const path = require("node:path")
 const fsPromise = require("node:fs/promises")
-
-const folder = process.argv[2] ?? "."
-
-/* Expected API:
-  <call_file> // show all: hidden and visible on actual file
-  <call_file> -f=.  // show all on actual folder: hidden and visible 
-  <call_file> -f=<folder>\/ // show all on that folder: hidden and visible 
-  <call_file> -h // show only hidden on actual folder
-  <call_file> -v // show only visible on actual folder
-  <call_file> -a // show all: hidden and visible on actual folder
-  
-  <call_file> -f=<folder>\/ -h // show only hidden on actual folder on that folder
-  <call_file> -f=<folder>\/ -v // show only visible on actual folder on that folder
-  <call_file> -f=<folder>\/ -a // show all: hidden and visible on actual folder on that folder
-  
-  <call_file> -h -f=<folder>\/ // show only hidden on actual folder on that folder
-  <call_file> -v -f=<folder>\/ // show only visible on actual folder on that folder
-  <call_file> -a -f=<folder>\/ // show all: hidden and visible on actual folder on that folder
-  
-
-*/
 
 const ARGUMENTS_ACCEPTED = {
   "-h": "-h", // hidden
@@ -73,8 +46,6 @@ const whichArgumentsUsed = () => {
 }
 
 const { folderToUse, filesToDisplay } = whichArgumentsUsed()
-// console.log("folderToUse, filesToDisplay:", folderToUse, filesToDisplay)
-
 const MACHINE = process.env.OS
 const USER_NAME = process.env.USERNAME
 
@@ -169,16 +140,14 @@ const ls = async ({ theFolder, filesToDisplay }) => {
     process.exit(0)
   }
 
-  filesInfo.forEach(
-    ({ fileType, fileSize, fileModified, theActualFile }, index) => {
-      console.log(
-        fileModified.padEnd(widthText.fileModifiedWidth),
-        fileSize.padEnd(widthText.fileSizeWidth),
-        fileType.padEnd(widthText.fileTypeWidth),
-        theActualFile.padEnd(widthText.theActualFile),
-      )
-    },
-  )
+  filesInfo.forEach(({ fileType, fileSize, fileModified, theActualFile }) => {
+    console.log(
+      fileModified.padEnd(widthText.fileModifiedWidth),
+      fileSize.padEnd(widthText.fileSizeWidth),
+      fileType.padEnd(widthText.fileTypeWidth),
+      theActualFile.padEnd(widthText.theActualFile),
+    )
+  })
   process.exit(0)
 }
 
