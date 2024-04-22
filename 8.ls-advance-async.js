@@ -22,18 +22,19 @@ const ls = async (theFolder) => {
     fileModifiedWidth: 0,
     theActualFile: 0,
   }
-  /* Not sequential here */
+  //  Not sequential here, this mean: parallel
   const filesPromises = theFiles.map(async (xFilesPromises, index) => {
-    const filePath = path.join(folder, xFilesPromises)
+    const filePath = path.join(theFolder, xFilesPromises)
     let stats
 
     console.log("No wait", index)
 
     try {
       stats = await fsPromise.stat(filePath)
-      console.log("stats", index)
+      // The await here will not wait actually
+      // console.log("This will NOT wait:", xFilesPromises)
     } catch {
-      console.log("Error on trying to read the directory")
+      console.log(`Error on trying to read the directory ${filePath}`)
       process.exit(1)
     }
 
