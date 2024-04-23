@@ -81,7 +81,7 @@ const ls = async ({ theFolder, filesToDisplay }) => {
       const filePath = path.join(theFolder, xFilesPromises)
       let stats
 
-      console.log("No wait", index)
+      // console.log("No wait", index)
 
       try {
         stats = await fsPromise.stat(filePath)
