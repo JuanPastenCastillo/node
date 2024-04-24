@@ -34,7 +34,7 @@ console.log("process.cwd():", process.cwd())
 console.log("process.platform:", process.platform)
 console.log("process.cpuUsage:", process.cpuUsage())
 
-/* This is a bad thing on node becaus the process.env: it have access to all the environment variables */
+/* This is a bad thing on node becaus the process.env: it have access to all the environment variables. One fo the problem is that you can delete files with scripskk */
 
 // console.log("process.env:", process.env)
 console.log("process.env.OS:", process.env.OS)
