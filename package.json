@@ -1,0 +1,26 @@
+{
+  "name": "learning-node",
+  "version": "1.0.0",
+  "description": "Class 1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JuanPastenCastillo/node.git"
+  },
+  "keywords": [
+    "node",
+    "juanpastencastillo"
+  ],
+  "author": "Juan Moisés Pastén Castillo - JMPC",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JuanPastenCastillo/node/issues"
+  },
+  "homepage": "https://github.com/JuanPastenCastillo/node#readme",
+  "dependencies": {
+    "picocolors": "1.0.0"
+  }
+}

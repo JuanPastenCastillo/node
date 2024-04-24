@@ -1,8 +1,8 @@
 /* node 8.ls-advance-async.js */
-const path = require("node:path")
-const fsPromise = require("node:fs/promises")
+const path = require('node:path')
+const fsPromise = require('node:fs/promises')
 
-const folder = process.argv[2] ?? "."
+const folder = process.argv[2] ?? '.'
 
 const MACHINE = process.env.OS
 const USER_NAME = process.env.USERNAME
@@ -16,11 +16,11 @@ const ls = async (theFolder) => {
     process.exit(1)
   }
 
-  let widthText = {
+  const widthText = {
     fileTypeWidth: 0,
     fileSizeWidth: 0,
     fileModifiedWidth: 0,
-    theActualFile: 0,
+    theActualFile: 0
   }
   //  Not sequential here, this mean: parallel
   const filesPromises = theFiles.map(async (xFilesPromises, index) => {
@@ -39,14 +39,14 @@ const ls = async (theFolder) => {
     }
 
     const isDirectory = stats.isDirectory()
-    const fileType = isDirectory ? `\x1b[34md\x1b[0m` : "f"
+    const fileType = isDirectory ? '\x1b[34md\x1b[0m' : 'f'
     const fileSize = stats.size
 
     const options = {
-      month: "short",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
+      month: 'short',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
     }
 
     const fileModified = stats.mtime.toLocaleString(undefined, options)
@@ -54,22 +54,22 @@ const ls = async (theFolder) => {
     widthText.fileTypeWidth = 1
     widthText.fileSizeWidth = Math.max(
       widthText.fileSizeWidth,
-      fileSize.toString().length,
+      fileSize.toString().length
     )
     widthText.fileModifiedWidth = Math.max(
       widthText.fileModifiedWidth,
-      fileModified.length,
+      fileModified.length
     )
     widthText.theActualFile = Math.max(
       widthText.theActualFile,
-      xFilesPromises.length,
+      xFilesPromises.length
     )
 
     return {
       fileType: `${fileType}`,
       fileSize: `${fileSize.toString()}`,
       fileModified: `${fileModified}`,
-      theActualFile: `${xFilesPromises}`,
+      theActualFile: `${xFilesPromises}`
     }
   })
 
@@ -83,7 +83,7 @@ const ls = async (theFolder) => {
       fileModified.padEnd(widthText.fileModifiedWidth),
       fileSize.padEnd(widthText.fileSizeWidth),
       fileType.padEnd(widthText.fileTypeWidth),
-      theActualFile.padEnd(widthText.theActualFile),
+      theActualFile.padEnd(widthText.theActualFile)
     )
   })
 }

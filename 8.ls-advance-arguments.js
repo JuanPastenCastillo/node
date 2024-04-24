@@ -6,42 +6,45 @@
 /* node 8.ls-advance-arguments.js -f=mjs/ -x nonesense_here */
 /* node 8.ls-advance-arguments.js -f=cmj/ -x nonesense_here */
 
-const path = require("node:path")
-const fsPromise = require("node:fs/promises")
+const path = require('node:path')
+const fsPromise = require('node:fs/promises')
+const pc = require('picocolors')
 
+/*
 const ARGUMENTS_ACCEPTED = {
   "-h": "-h", // hidden
-  "-v": "-v", // visible
+  "-v": "-v", // b
   "-a": "-a", // all → this is the default
   "-f": "-f", // folder → by default, actual folder
 }
+*/
 
 const whichArgumentsUsed = () => {
-  let allArguments = process.argv.slice(2)
+  const allArguments = process.argv.slice(2)
 
-  let folderToUse = ""
-  let filesToDisplay = ""
+  let folderToUse = ''
+  let filesToDisplay = ''
   allArguments.forEach((xAllArguments) => {
-    if (folderToUse === "") {
-      let folderMatched = xAllArguments.match(/^\-f=*/)
+    if (folderToUse === '') {
+      const folderMatched = xAllArguments.match(/^-f=*/)
       if (folderMatched) {
-        folderToUse = folderMatched.input.match(/(?<=\-f=).*/g)[0]
+        folderToUse = folderMatched.input.match(/(?<=-f=).*/g)[0]
         return
       }
     }
 
-    if (filesToDisplay === "") {
-      let filesMatched = xAllArguments.match(/^\-h|^\-v/)
+    if (filesToDisplay === '') {
+      const filesMatched = xAllArguments.match(/^-h|^-v/)
       if (filesMatched) {
         filesToDisplay = filesMatched.input
-        return
+        // return
       }
     }
   })
 
   return {
-    folderToUse: folderToUse || ".",
-    filesToDisplay: filesToDisplay || "-a",
+    folderToUse: folderToUse || '.',
+    filesToDisplay: filesToDisplay || '-a'
   }
 }
 
@@ -54,28 +57,30 @@ const ls = async ({ theFolder, filesToDisplay }) => {
   try {
     theFiles = await fsPromise.readdir(theFolder)
   } catch {
-    console.log(`Error on trying to read the directory ${theFolder}`)
+    console.log(pc.red(`Error on trying to read the directory ${theFolder}`))
     process.exit(1)
   }
 
-  let widthText = {
+  const widthText = {
     fileTypeWidth: 0,
     fileSizeWidth: 0,
     fileModifiedWidth: 0,
-    theActualFile: 0,
+    theActualFile: 0
   }
   //  Not sequential here, this mean: parallel
   const filesPromises = theFiles
     .filter((x) => {
-      if (filesToDisplay === "-h" && x.startsWith(".")) {
+      if (filesToDisplay === '-h' && x.startsWith('.')) {
         return true
       }
-      if (filesToDisplay === "-v" && !x.startsWith(".")) {
+      if (filesToDisplay === '-v' && !x.startsWith('.')) {
         return true
       }
-      if (filesToDisplay === "-a") {
+      if (filesToDisplay === '-a') {
         return true
       }
+
+      return false
     })
     .map(async (xFilesPromises, index) => {
       const filePath = path.join(theFolder, xFilesPromises)
@@ -88,22 +93,22 @@ const ls = async ({ theFolder, filesToDisplay }) => {
         // The await here will not wait actually
         // console.log("This will NOT wait:", xFilesPromises)
       } catch {
-        console.log("Error on trying to read the directory")
+        console.log('Error on trying to read the directory')
         process.exit(1)
       }
 
       const isDirectory = stats.isDirectory()
-      const fileType = isDirectory ? `\x1b[34md\x1b[0m` : "f"
+      const fileType = isDirectory ? '\x1b[34md\x1b[0m' : 'f'
       const fileSize = stats.size
-      let theActualFile = isDirectory
+      const theActualFile = isDirectory
         ? `\x1b[34m${xFilesPromises}\x1b[0m`
         : xFilesPromises
 
       const options = {
-        month: "short",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
+        month: 'short',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
       }
 
       const fileModified = stats.mtime.toLocaleString(undefined, options)
@@ -111,22 +116,22 @@ const ls = async ({ theFolder, filesToDisplay }) => {
       widthText.fileTypeWidth = 1
       widthText.fileSizeWidth = Math.max(
         widthText.fileSizeWidth,
-        fileSize.toString().length,
+        fileSize.toString().length
       )
       widthText.fileModifiedWidth = Math.max(
         widthText.fileModifiedWidth,
-        fileModified.length,
+        fileModified.length
       )
       widthText.theActualFile = Math.max(
         widthText.theActualFile,
-        xFilesPromises.length,
+        xFilesPromises.length
       )
 
       return {
         fileType: `${fileType}`,
         fileSize: `${fileSize.toString()}`,
         fileModified,
-        theActualFile,
+        theActualFile
       }
     })
 
@@ -136,16 +141,16 @@ const ls = async ({ theFolder, filesToDisplay }) => {
   console.log(`USER NAME: ${USER_NAME}`)
 
   if (filesInfo.length === 0) {
-    console.log("Nothing to show")
+    console.log('Nothing to show')
     process.exit(0)
   }
 
   filesInfo.forEach(({ fileType, fileSize, fileModified, theActualFile }) => {
     console.log(
-      fileModified.padEnd(widthText.fileModifiedWidth),
-      fileSize.padEnd(widthText.fileSizeWidth),
-      fileType.padEnd(widthText.fileTypeWidth),
-      theActualFile.padEnd(widthText.theActualFile),
+      pc.cyan(fileModified.padEnd(widthText.fileModifiedWidth)),
+      pc.yellow(fileSize.padEnd(widthText.fileSizeWidth)),
+      pc.green(fileType.padEnd(widthText.fileTypeWidth)),
+      pc.green(theActualFile.padEnd(widthText.theActualFile))
     )
   })
   process.exit(0)
