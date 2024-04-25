@@ -1,10 +1,9 @@
-# Learning node
+# Learning node && backend
 
 ## DONE
 
-### Node
 <details>
-  <summary>class-1</summary>
+  <summary>class-1: NODE</summary>
   <ol start="0">
     <li>
       <details>
@@ -112,7 +111,7 @@
 
 
 <details>
-  <summary>class-2</summary>
+  <summary>class-2: HTTP && Express</summary>
   <ol>
     <li>
       <details>
@@ -237,9 +236,46 @@
           <li>In this class the file api.http was used</li>
         </ul>
       </details>
+      <li>
+        <details>
+          <summary>Express</summary>
+          <ul>
+            <li>When you use express it add some header call X-Powered-By with the value of "Express". This could lead to security problems because everyone can know te technology you are using and try to exploit vulnerabilities there. is recommended to disable this with «app.disable("x-powered-by")»</li>
+            <li>One of the magic thing of express is the use of middleware. This can be used to extract cookies, validate if the user is logged, extract the data from json or any type of logic. Is something previous to to do before it arraive to the request. When it's done it call the «next()» method to continue. The middleware is executed between the request and the response</li>
+            <li>
+              Middleware: 
+              <ul>
+                <li>You can decide to which request the middleware will affect. For example:
+                <ul>
+                  <li>app.use("/pokemon/*", fn) → All the requests that start with "/pokemon/*" will be affected</li>
+                <li>app.use("/", fn) → Only the request on home will be affected</li>
+                <li>app.use(fn) → All the routes will be affected. This is the usual behavior</li>
+                </ul>
+                </li>
+              </ul>
+              <ul>
+                <li>The middleware can be used also for specific methods: only for GET, only for POST</li>
+              </ul>
+              <ul>
+                <li>Caveats 🟨:
+                  <ul>
+                    <li>You shouldn't forget the final «next()» method because if you forget it will wait infinitely for the next request</li>
+                    <li>A middleware can be used at first, in between or at last. The concept of this is "be in the middle" but technically the «app.use()» can be used as a middleware anywhere. Is like a proxy, intercep the request to respond it later. A proxy and a middleware intercep a request but the final goal is different: the Proxy will have the responsibility of orchestration but the Middleware will do that and apply some logic or task into it. A Middleware could reject a request</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li>On Express the method <code>app.use(express.json())</code> ccan be used to make something a json. See the file <code>class-2/3.express.js</code> on line <code>33</code> to learn it</li>
+            <li>Express allow you to use the route first and the callback after</li>
+            <li>In the post, everything is the same as nodejs</li>
+            <li>The calls of <code>app.*</code> is dependendat on the order</li>
+            <li>The API <code>app.liste</code> is the same as nodejs</li>
+          </ul>
+        </details>
+      </li>
       </li>
     </li>
     </details>
 
 ## NOW
-- Express + API
+- CORS and API Rest

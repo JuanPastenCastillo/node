@@ -12,3 +12,18 @@ Content-Type: application/json
     "transform"
   ]
 }
+
+### Should lead to a 404 with GET
+GET http://localhost:3000/URL-not-found-GET
+
+### Should lead to a 404 with POST
+POST http://localhost:3000/URL-not-found-POST
+Content-Type: application/json
+
+{
+  "name":"ditto",
+  "type": "normal",
+  "moves": [
+    "transform"
+  ]
+}
