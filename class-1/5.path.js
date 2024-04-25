@@ -1,4 +1,4 @@
-/* node 5.path.js */
+/* node class-1/5.path.js */
 
 /*
  * We going to use this to build the route of files, know if a file have some extension, recover an extension, create absolute routes, joinr routes and so on
@@ -8,7 +8,7 @@ console.log("path:", path.sep) // path separator for your actual OS
 
 const filePath = path.join(
   "folder",
-  "file.txt",
+  "file.txt"
 ) /* The ausencce of first "/" at the beginning of the path make this an relative path, the second "/" are optionals  */
 console.log("filePath:", filePath)
 
@@ -23,7 +23,7 @@ console.log("absoluteFilePath:", path.resolve(__dirname, filePath))
 
 const filePath2 = path.join(
   "/folder",
-  "/file.txt",
+  "/file.txt"
 ) /* The presence of the first "/" at the beginning of the path make this an absolute path, the second "/" are optionals  */
 console.log("filePath2:", filePath2)
 
@@ -38,24 +38,24 @@ let some_route = "tmp/secrets/password.txt"
 
 const base =
   path.basename(
-    some_route,
+    some_route
   ) /* From the whole route you will get the name of the file */
 console.log("base:", base)
 
 const extension =
   path.extname(
-    some_route,
+    some_route
   ) /* From the whole route you will get the extension of the file */
 console.log("extension:", extension)
 
 const filename = path.basename(
   some_route,
-  ".txt",
+  ".txt"
 ) /* From the whole route you will get the name of the file */
 console.log("filename:", filename)
 
 const filename_with_variable = path.basename(
   some_route,
-  extension,
+  extension
 ) /* From the whole route you will get the name of the file */
 console.log("filename_with_variable:", filename_with_variable)

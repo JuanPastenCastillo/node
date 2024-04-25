@@ -1,0 +1,18 @@
+{
+  "name": "class-2",
+  "version": "1.0.0",
+  "description": "class-2",
+  "main": "idnex.js",
+  "scripts": {
+    "dev": "nodemon"
+  },
+  "keywords": [
+    "node",
+    "express"
+  ],
+  "author": "Juan Moisés Pastén Castillo - JMPC",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
