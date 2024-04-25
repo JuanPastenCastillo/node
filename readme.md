@@ -213,6 +213,31 @@
              </li>
           </ul>
       </details>
+      <li>
+      <details>
+        <summary>Routing</summary>
+        <ul>
+          <li>In commonJS you can import json data directly and use it</li>
+          <li>Methods of routing:
+            <ul>
+              <li>GET: To get data</li>
+              <li>HEAD: Is exactly the same as get but without the responding of the body. Is usually used to know if the user have permission to access to some content</li>
+              <li>POST: To create data</li>
+              <li>PUT: To update data, this replace the content</li>
+              <li>PATCH: To modifiy partially some data</li>
+              <li>DELETE: To delete data</li>
+              <li>OPTIONS: This is used to know which communication are available for the target resource. This is usually the problem we have on CORS on browser. The browser make a request to a server and this server send a response with the type of comunication allowed. The OPTION return the headers CORS</li>
+            </ul>
+          </li>
+          <li>Caveats 🟨:
+            <ul>
+              <li>There's some discusión about the use of POST versus PATCH. Search it</li>
+            </ul>
+          </li>
+          <li>In this class the file api.http was used</li>
+        </ul>
+      </details>
+      </li>
     </li>
     </details>
 
