@@ -276,6 +276,84 @@
       </li>
     </li>
     </details>
+    
+<details>
+  <summary>class-3: CORS + API Rest with Express</summary>
+  <ol>
+    <li>
+    <details>
+      <summary>API REST</summary>
+      <ul>
+        <li>
+          REST mean: Representational State Transfer an Software Architecture (not a framework, not a library, not an idea, not a pattern)
+        </li>
+        <li>
+          Was created to transfer data specially on web
+        </li>
+        <li>
+          Was created on the 2000 year by Roy Fielding
+        </li>
+        <li>
+          Principals features on REST:
+          <ul>
+            <li>
+              Scalability
+            </li>  
+            <li>
+              Simplicity
+            </li>  
+            <li>
+              Visibility
+            </li>  
+            <li>
+              Portability
+            </li>  
+            <li>
+              Realiability
+            </li>  
+            <li>
+              Easy to modify
+            </li>  
+          </ul>
+        </li>
+        <li>
+          All Software Architecture should achieve a goal with some principals that can sustain over time the best possible way and simplify the creation of that piece of software. This is the goal of every Software Architecture
+        </li>
+        <li>
+          Fundamentals on REST:
+          <ul>
+            <li>Resources: everything here is a resource (a user, book, some publication, an image or a collection of this resources, a list of users, books, and so on). Every resource will be identified with an URL</li>
+            <li>Methods: what kind of action you want to do with the resource. This could be GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS and TRACE. The most common actions made here are the "CRUD" → Create (POST), Read (GET), Update (PUT or PATCH), Delete (DELETE)</li>
+            <li>Representation: This is how the resource is represented: the most common representation is JSON but is not mandatory, this could be also XML, HTML, CSV, etc. The client decide which representation be the resource, having none restriction on the format. One client can ask for a JSON while other client can ask for a XML representation</li>
+            <li>Stateless: every request to the server should contain all the neccesary data to understand that request. This mean the server should not be able to remember anything about the request. For example it cannot save how many calls have been made to the server, it have to make pagination or not, that data should be always on the URL of the request. Sometimes some data can be save to help the client but in that case the REST architecture will be break. Another case is when we have some database on the backend.</li>
+            <li>Unified interfaz: this is difficul to break it but it means that the interfaz between client and server should be consistent for every interaction. The URLs should always do the same, should always be called the same</li>
+            <li>Separation of concepts: components of client and server should be separated. This allow the server and the client evolve independently</li>
+          </ul>
+        </li>
+        <li>Caveat 🟨:
+          <ul>
+            <li>Sometimes you can make some API that is not REST, another architecture exist (like SOAP or GraphQL). Some people think that an API that return a JSON is immediately a REST API but it is not always the case</li>
+            <li>Resources: sometimes you can decide to identify the resources with a path on the URL or with some queries. It will depend on the specific use case you want to achieve</li>
+          </ul>
+        </li>
+      </ul>
+    </details>
+    <li>
+      <details>
+        <summary>Express use path-to-regex</summary>
+        <ol>
+          <li>Is possible to put regex in the URL but express use this library: path-to-regex, like this <code>app.get("/movies/:id", fn)</code>
+          </li>
+          <li>Is possible to use <code>/movies/:id/:couldBeMore/*:andAsMuchAsYouWant</code> where the <code>:id</code>, <code>:couldBeMore</code>, <code>:andAsMuchAsYouWant</code> and <code>*</code> are part of the URL separated by an slash. Is your decition using it this way or making them query params</li>
+          <li>Everytime you can, use path-to-regex because make the regex by you can lead into problems</li>
+          <li>To know more check the github repository of <a href="https://github.com/pillarjs/path-to-regexp">pillarjs</a> or the <a href="https://expressjs.com/en/guide/routing.html">express explanation in their documentation</a>r></li>
+        </ol>
+      </details>
+    </li>
+    </li>
+  </ol>
+</details>
+
 
 ## NOW
 - CORS and API Rest
