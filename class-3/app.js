@@ -18,7 +18,7 @@ All Software Architecture should achieve a goal with some principals that can su
 
 Fundamentals on REST:
   - Resources: everything here is a resource (a user, book, some publication, an image or a collection of this resources, a list of users, books, and so on). Every resource will be identified with an URL
-  - Methods: what kind of action you want to do with the resource. This could be GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS and so on. The most common actions made here are the "CRUD" → Create (POST), Read (GET), Update (PUT or PATCH), Delete (DELETE)
+  - Methods: what kind of action you want to do with the resource. This could be a GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS, CONNECT, or TRACE. The most common actions made here are the "CRUD" → Create (POST), Read (GET), Update (PUT or PATCH), Delete (DELETE)
   - Representation: This is how the resource is represented: the most common representation is JSON but is not mandatory, this could be also XML, HTML, CSV, etc. The client decide which representation be the resource, having none restriction on the format. One client can ask for a JSON while other client can ask for a XML representation
   - Stateless: every request to the server should contain all the neccesary data to understand that request. This mean the server should not be able to remember anything about the request. For example it cannot save how many calls have been made to the server, it have to make pagination or not, that data should be always on the URL of the request. Sometimes some data can be save to help the client but in that case the REST architecture will be break. Another case is when we have some database on the backend.
   - Unified interfaz: this is difficul to break it but it means that the interfaz between client and server should be consistent for every interaction. The URLs should always do the same, should always be called the same
@@ -30,20 +30,28 @@ Caveat 🟨:
 */
 
 const express = require("express")
+const crypto = require("node:crypto")
+const { validateMovie, validatePartialMovies } = require("./schemas/movies")
 const allMoviesJSON = require("./data/movies.json")
-const { formatResponse } = require("./formatResponse")
-const { moviesQueryParams } = require("./moviesQueryParams")
+const { toJSON } = require("./utils/toJSON")
+const { formatResponse } = require("./utils/formatResponse")
+const { moviesQueryParams } = require("./utils/moviesQueryParams")
 
 const app = express()
 app.disable("x-powered-by")
 
+const ROUTES = {
+  MOVIES: "/movies",
+  HOME: "/"
+}
+
 /* An endpoint of a path (some URL) where you have some resource to extract data*/
-app.get("/", (req, res) => {
+app.get(ROUTES.HOME, (req, res) => {
   res.json({ message: "This is the endpoint for home" })
 })
 
 app.use((req, res, next) => {
-  if (req.method === "GET" && req.url.startsWith("/movies")) {
+  if (req.method === "GET" && req.url.startsWith(ROUTES.MOVIES)) {
     const { format = "json" } = req.query
 
     if (format.toLowerCase() === "json") {
@@ -54,11 +62,16 @@ app.use((req, res, next) => {
       req._format = format.toLowerCase()
       return next()
     }
+  } else if (
+    (req.method === "POST" || req.method === "PATCH") &&
+    req.url.startsWith(ROUTES.MOVIES)
+  ) {
+    toJSON({ req, next })
   }
 })
 
 /* All the resources that are «MOVIES» will be identifies with the URL /movies */
-app.get("/movies", (req, res) => {
+app.get(ROUTES.MOVIES, (req, res) => {
   /* In this way you can choose the format of the response. Here, by default, is JSON if nothing is passed. This accomplish the Representation fundamental on REST where is the client who decide which would be the representation of the data they want */
 
   const { page, limit } = req.query
@@ -85,48 +98,9 @@ app.get("/movies", (req, res) => {
     theResMethod: res,
     theResBody: dataFiltered
   })
-
-  // if (Object.keys(req.query).length !== 0) {
-  //   const { page, limit } = req.query
-
-  //   const pageFormatted = page ? parseInt(page, 10) : 1
-  //   const limitFormatted = limit ? parseInt(limit, 10) : 10
-
-  //   const offset = page ? (pageFormatted - 1) * limitFormatted : 0
-
-  //   const pagination = {
-  //     pageFormatted,
-  //     limitFormatted,
-  //     offset
-  //   }
-
-  //   const dataFiltered = moviesQueryParams(
-  //     {
-  //       allQueries: req.query,
-  //       dataToFilter: allMoviesJSON
-  //     },
-  //     { pagination }
-  //   )
-
-  //   formatResponse({
-  //     _actualFormat: req._format,
-  //     theResMethod: res,
-  //     theResBody: dataFiltered
-  //   })
-  // } else {
-  //   /*
-  //   !FH0
-
-  //   PREVENT ask all the resources */
-  //   formatResponse({
-  //     _actualFormat: req._format,
-  //     theResMethod: res,
-  //     theResBody: allMoviesJSON
-  //   })
-  // }
 })
 
-app.get("/movies/:id", (req, res) => {
+app.get(`${ROUTES.MOVIES}/:id`, (req, res) => {
   // path-to-regex → Is possible to put regex in the URL but express use this library: path-to-regex
   /*
   - Is possible to use «/movies/:id/:couldBeMore/*:andAsMuchAsYouWant» where the :id, :couldBeMore, :andAsMuchAsYouWant and * are part of the URL separated by an slash. Is your decition using it this way or making them query params
@@ -149,17 +123,105 @@ app.get("/movies/:id", (req, res) => {
   }
 })
 
+/* This should always be the same resource, is not like you can put here `app.post("/create-movies", fn)`, this is because the Resource is defined by the URL and is the verb which decide what's going to be done there: GET, POST, other */
+app.post(ROUTES.MOVIES, (req, res) => {
+  const requestValidated = validateMovie({ objectToValidate: req.body })
+
+  /* You can check here:
+  - requestValidated.error for error
+  - requestValidated.sucess for success. 
+  - When success is true, the error doesn't exist —would be a undefined—. 
+  - The data will be on requestValidated.data only when success is true
+  */
+  if (requestValidated.error) {
+    /* You can pass here a 422 instead a 400:
+      - The 400 status code is because the client did something to lead on this error: sintaxis error, the data sent was not correct. The important thing here is: the client cannot do a new request without modifications
+      - Other approach is 422: the server understood the request, type of content but the sintaxis of the resource was not possible to created because some validation or instruction was not correct. The same as the previous: client will not be able to make another request is it not change something 
+      
+    Final though, use anything you want
+      */
+    return res
+      .status(400)
+      .json({ error: JSON.parse(requestValidated.error.message) })
+  }
+
+  /* 
+  Avoid this approach because it will be to expensive to validate every field. Use zod instead
+  const { title, year, director, duration, poster, genre, rate } = req.body 
+  */
+
+  /* From now on, this would not be REST because we are going to save on memory the state of the application. In following classes this would be the call to the database  */
+  const newMovie = {
+    id: crypto.randomUUID(), // uuid v4
+    idToPATCH: Object.keys(allMoviesJSON).length + 1,
+    ...requestValidated.data
+    /*
+    The problem with this approach is:
+      - You don't make any validation of the data, the client can send wrong value for every key (a number where should be a string), could send wrong keys ("A" when it should be "B") or could send just another type of data structure (an incomplete object or just a new different thing).
+      - We going to validate the data using Zod and Yup (a library that check the data at runtime, Typescript would not solve this problem). Other options could be Valibot
+    title,
+    year,
+    director,
+    duration,
+    poster,
+    genre,
+    rate: rate ?? null
+    */
+  }
+
+  allMoviesJSON.push(newMovie)
+
+  res.status(201).json(newMovie) // You can return the resource created to update the cache of the client
+})
+
+/* Take in mind: here we are using «:idToPATCH» instead of «:id» because in this way it will work the file api.http file but in the future, you should use the correct ID created by the crypto.randomUUID() method */
+app.patch(`${ROUTES.MOVIES}/:idToPATCH`, (req, res) => {
+  const requestValidated = validatePartialMovies({ objectToValidate: req.body })
+  if (requestValidated.error) {
+    return res
+      .status(400)
+      .json({ error: JSON.parse(requestValidated.error.message) })
+  }
+
+  const { idToPATCH } = req.params
+  const movieIndex = allMoviesJSON.findIndex((movie) => {
+    return Number(movie?.idToPATCH) === Number(idToPATCH)
+  })
+
+  if (movieIndex === -1) {
+    return res
+      .status(404)
+      .json({ message: `Movie not found with id «${idToPATCH}»` })
+  }
+
+  const updatedMovie = {
+    ...allMoviesJSON[movieIndex],
+    ...requestValidated.data
+  }
+
+  allMoviesJSON[movieIndex] = updatedMovie
+
+  return res.json(updatedMovie)
+})
+
+/* 
+This is important: the Idempotence. Is the property of realize an action several times and even though achieve the same result as you would  get with the first try. Pure functions are idempotent. This property talk about the inner state of something. Now the methods:
+
+- Purpose of POST: create a new element/resource on server
+  + On URL: `/movies`
+  + Idempotence: this is not idempotente because every time you call this method a new resource is created
+- Purpose of PUT: update an existing element/resource on server o create it if it doesn't exist
+  + On URL: `/movies/:id` → `/movies/123-456-789`
+  + Idempotence: this is idempotente the bast majority of the time, but it could not be sometimes
+- Purpose of PATCH: update partially an existing element/resource on server
+  + On URL: `/movies/:id` → `/movies/123-456-789`
+  + Idempotence: this is not idempotente ithe bast majority of the time, but it could be sometimes
+  
+One question, is it danger to create the ID from outside? The answer: it could be but this will depend of the context of the application. For example, sometimes this ID can come from outside: the email of an user for example or other thing that will identify that person as unique in the analog world
+
+*/
+
 const PORT = process.env.PORT ?? 3000
 app.listen(PORT, () => {
   console.log(`Server listening on port http://localhost:${PORT}`)
 })
-
-/* 
-!FH0
-CHALLENGE:
-- Add pagination. I think is is donde adding just a key to the resource that say which page is: like the first page is 1, the second page is 2, etc. And with that retrieve the ammount of data you want based on their possition
-
-
-
-- Check the methods OPTIONS, CONNECT, HEAD and TRACE
-*/

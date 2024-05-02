@@ -170,3 +170,58 @@ GET http://localhost:3000/movies?page=3
 
 ### Search with a filter of movies with pagination
 GET http://localhost:3000/movies
+
+### Search with a filter of movies with pagination
+GET http://localhost:3000/movies?page=3
+
+### Create a new movie. On the API you should be able to receive anything, the key is how the API will process the data and how they'r going to return the data. With this said: the API should not be blocked because the data they receive, not for the type of data neither because the order. In this case the "sql" key and value is ignored, it doesn't have problem
+POST http://localhost:3000/movies
+Content-Type: application/json
+
+{
+  "sql": "SELECT * FROM users",
+  "title": "The Godfather",
+  "year": 1975,
+  "director": "Francis Ford Cappola",
+  "duration": 175,
+  "poster": "https://img.fruugo.com/product/4/49/14441494_max.jpg",
+  "genre": [
+    "Crime",
+    "Drama"
+  ]
+}
+
+### Create a new movie wrong: should throw. A full explanation should be showed on the console
+POST http://localhost:3000/movies
+Content-Type: application/json
+
+{
+  "title": 999,
+  "year": "1975",
+  "director": true,
+  "duration": 0,
+  "poster": "https://czxczxczxc",
+  "genre": [
+    "Drama",
+    "jaajajajaj"
+  ]
+}
+
+### Update a movie: correct
+PATCH http://localhost:3000/movies/23
+Content-Type: application/json
+
+{
+  "title":"A new better title =D",
+  "year": 2010
+}
+
+### Update a movie: incorrect. This will update what it can but not the things that are not in the schema, in this case the ID. This is like the "sql" ignore of above
+PATCH http://localhost:3000/movies/23
+Content-Type: application/json
+
+{
+  "id": "better_strong_id_0123456789",
+  "title":"Even better, yeah!",
+  "year": 2017
+}

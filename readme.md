@@ -349,7 +349,51 @@
           <li>To know more check the github repository of <a href="https://github.com/pillarjs/path-to-regexp">pillarjs</a> or the <a href="https://expressjs.com/en/guide/routing.html">express explanation in their documentation</a>r></li>
         </ol>
       </details>
-    </li>
+      </li>
+      <li>
+        <details>
+          <summary>POST, PATCH, PUT and Schema (Zod)</summary>
+          <ul>
+            <li>To Understand the POST: You have to work all the time in the same route, is not like you can put here `app.post("/create-movies", fn)`, this is because the Resource is defined by the URL and is the verb which decide what's going to be done there: GET, POST, other</li>
+            <li>ID on Post: <code>crypto.randomUUID()</code></li>
+            <li>With Zod: You can validate the data with the method "parse" or you can use "safeParse". With "safeParse" you will have a object result with data or errors. You can even use the safeParseAsync to avoid blocking the request return movieSchema.parse(objectToValidate)</li>
+            <li>On the error of the validation of schema (Zod):
+              <ul>You can pass here a 422 instead a 400:
+                <li>
+                  The 400 status code is because the client did something to lead on this error: sintaxis error, the data sent was not correct. The important thing here is: the client cannot do a new request without modifications
+                </li>
+                <li>Other approach is 422: the server understood the request, type of content but the sintaxis of the resource was not possible to created because some validation or instruction was not correct. The same as the previous: client will not be able to make another request is it not change something </li>
+                <li>Final though, use anything you want  </li>
+              </ul>
+            </li>
+            <li>Remember, a REST API don't save data by their own. For that, use a database </li>
+            <li>Idempotence and differences between POST, PUT and PATCH:
+              <ul>
+                <li>Idempotence: is the property of realize an action several times and even though achieve the same result as you would  get with the first try. Pure functions are idempotent. This property talk about the inner state of something. Now the methods</li>
+                <li>Purpose of POST: create a new element/resource on server
+                  <ol>
+                    <li>On URL: `/movies`</li>
+                    <li>Idempotence: this is not idempotente because every time you call this method a new resource is created</li>
+                  </ol>
+                </li>
+                <li>Purpose of PUT: update an existing element/resource on server o create it if it doesn't exist
+                  <ol>
+                    <li>On URL: `/movies/:id` → `/movies/123-456-789`</li>
+                    <li>Idempotence: this is idempotente the bast majority of the time, but it could not be sometimes</li>
+                  </ol>
+                </li>
+                <li>Purpose of PATCH: update partially an existing element/resource on server
+                  <ol>
+                    <li>On URL: `/movies/:id` → `/movies/123-456-789`</li>
+                    <li>Idempotence: this is not idempotente ithe bast majority of the time, but it could be sometimes</li>
+                  </ol>
+                </li>
+              </ul>
+              <li>One question, is it danger to create the ID from outside? The answer: it could be but this will depend of the context of the application. For example, sometimes this ID can come from outside: the email of an user for example or other thing that will identify that person as unique in the analog world</li>
+            </li>
+          </ul>
+        </details>
+      </li>
     </li>
   </ol>
 </details>

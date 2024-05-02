@@ -85,7 +85,6 @@ const moviesQueryParams = ({ allQueries, dataToFilter }, { pagination }) => {
       }
     })
 
-  const actualPage = pagination.pageFormatted
   const dataFiltered = dataToFilter.filter((xFilter) => {
     let conditionsToCheck = []
     filteredQueries.forEach(({ key, value, typeFound }) => {
@@ -142,6 +141,7 @@ const moviesQueryParams = ({ allQueries, dataToFilter }, { pagination }) => {
     return toReturn
   })
 
+  const actualPage = pagination.pageFormatted
   const totalAmountResourcesToShow = dataFiltered.length
   const totalPages = Math.ceil(dataFiltered.length / pagination.limitFormatted)
   const prevPage = actualPage > 1 ? actualPage - 1 : null
@@ -154,7 +154,6 @@ const moviesQueryParams = ({ allQueries, dataToFilter }, { pagination }) => {
   )
 
   const howMuchShowingNow = dataSliced.length
-  // const dataFilteredToReturn = dataFiltered.length !== 0 ? dataFiltered :
 
   const objToReturn = {
     data: dataSliced,
