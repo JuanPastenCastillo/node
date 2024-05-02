@@ -82,6 +82,9 @@ GET http://localhost:3000/movies?oscar=true
 ### Search with a filter of movies that doesn't won an oscar
 GET http://localhost:3000/movies?oscar=false
 
+### Search with a filter of movies that doesn't won an oscar plus pagination
+GET http://localhost:3000/movies?oscar=false&page=2
+
 ### Search with a filter of director's name
 GET http://localhost:3000/movies?director=James_Cameron
 
@@ -103,8 +106,7 @@ GET http://localhost:3000/movies?director=James_Cameron&genre=ACTION&notFounded=
 ### Search with a filter of director's name, genre action and won an oscar
 GET http://localhost:3000/movies?director=James_Cameron&genre=ACTION&notFounded=true&oscar=true
 
-
-### Search with a filter of director TESTING
+### Search with a filter of director's name, genre action, won an oscar and not based on book
 GET http://localhost:3000/movies?director=James_Cameron&genre=ACTION&notFounded=true&oscar=true&basedOnBook=false
 
 ### Search with a filter of specific name
@@ -121,3 +123,50 @@ GET http://localhost:3000/movies?yearUntil=1800
 
 ### Search with a filter of year: between
 GET http://localhost:3000/movies?yearBetween=2011-2014
+
+### Search with a filter of year: between
+GET http://localhost:3000/movies?yearBetween=2011-2014&limit=1
+
+### Search with a filter of movies with pagination
+GET http://localhost:3000/movies?page=1&limit=4
+
+### Search with a filter of movies with pagination
+GET http://localhost:3000/movies?page=2&limit=4
+
+### Search with a filter of movies with pagination
+GET http://localhost:3000/movies?page=3&limit=4
+
+### Search with a filter of movies with pagination
+GET http://localhost:3000/movies?page=6&limit=4
+
+### Search with a filter of movies with pagination
+GET http://localhost:3000/movies?page=7&limit=4
+
+### Search with a filter of movies with pagination
+GET http://localhost:3000/movies?genre=Action&format=html&more=true&page=1&limit=4
+
+### Search with a filter of movies with pagination
+GET http://localhost:3000/movies?genre=Action&format=html&more=true&page=2&limit=4
+### Search with a filter of movies with pagination
+GET http://localhost:3000/movies?genre=Action&format=html&more=true&page=3&limit=4
+
+### Search with a filter of movies with pagination
+GET http://localhost:3000/movies?&limit=1
+
+### Search with a filter of movies with pagination
+GET http://localhost:3000/movies?&limit=2
+
+### Search with a filter of movies with pagination
+GET http://localhost:3000/movies?&limit=5
+
+### Search with a filter of movies with pagination
+GET http://localhost:3000/movies?page=1
+
+### Search with a filter of movies with pagination
+GET http://localhost:3000/movies?page=2
+
+### Search with a filter of movies with pagination
+GET http://localhost:3000/movies?page=3
+
+### Search with a filter of movies with pagination
+GET http://localhost:3000/movies

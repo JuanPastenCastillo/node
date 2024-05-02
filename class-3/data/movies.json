@@ -310,5 +310,33 @@
     "rate": 9.1,
     "oscar": true,
     "basedOnBook": true
+  },
+  {
+    "id": "21",
+    "title": "The Shawshank Redemption",
+    "year": 1994,
+    "director": "Frank Darabont",
+    "duration": 142,
+    "poster": "https://i.ebayimg.com/images/g/4goAAOSwMyBe7hnQ/s-l1200.webp",
+    "genre": [
+      "Drama"
+    ],
+    "rate": 9.3,
+    "oscar": false,
+    "basedOnBook": true
+  },
+  {
+    "id": "22",
+    "title": "The Shawshank Redemption",
+    "year": 1994,
+    "director": "Frank Darabont",
+    "duration": 142,
+    "poster": "https://i.ebayimg.com/images/g/4goAAOSwMyBe7hnQ/s-l1200.webp",
+    "genre": [
+      "Drama"
+    ],
+    "rate": 9.3,
+    "oscar": false,
+    "basedOnBook": true
   }
 ]

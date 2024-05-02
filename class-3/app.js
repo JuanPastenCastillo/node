@@ -61,24 +61,69 @@ app.use((req, res, next) => {
 app.get("/movies", (req, res) => {
   /* In this way you can choose the format of the response. Here, by default, is JSON if nothing is passed. This accomplish the Representation fundamental on REST where is the client who decide which would be the representation of the data they want */
 
-  if (Object.keys(req.query).length !== 0) {
-    const getQueryParams = moviesQueryParams({
+  const { page, limit } = req.query
+  const pageFormatted = page ? parseInt(page, 10) : 1
+  const limitFormatted = limit ? parseInt(limit, 10) : 10
+
+  const offset = page ? (pageFormatted - 1) * limitFormatted : 0
+
+  const pagination = {
+    pageFormatted,
+    limitFormatted,
+    offset
+  }
+  const dataFiltered = moviesQueryParams(
+    {
       allQueries: req.query,
       dataToFilter: allMoviesJSON
-    })
+    },
+    { pagination }
+  )
 
-    formatResponse({
-      _actualFormat: req._format,
-      theResMethod: res,
-      theResBody: getQueryParams
-    })
-  } else {
-    formatResponse({
-      _actualFormat: req._format,
-      theResMethod: res,
-      theResBody: allMoviesJSON
-    })
-  }
+  formatResponse({
+    _actualFormat: req._format,
+    theResMethod: res,
+    theResBody: dataFiltered
+  })
+
+  // if (Object.keys(req.query).length !== 0) {
+  //   const { page, limit } = req.query
+
+  //   const pageFormatted = page ? parseInt(page, 10) : 1
+  //   const limitFormatted = limit ? parseInt(limit, 10) : 10
+
+  //   const offset = page ? (pageFormatted - 1) * limitFormatted : 0
+
+  //   const pagination = {
+  //     pageFormatted,
+  //     limitFormatted,
+  //     offset
+  //   }
+
+  //   const dataFiltered = moviesQueryParams(
+  //     {
+  //       allQueries: req.query,
+  //       dataToFilter: allMoviesJSON
+  //     },
+  //     { pagination }
+  //   )
+
+  //   formatResponse({
+  //     _actualFormat: req._format,
+  //     theResMethod: res,
+  //     theResBody: dataFiltered
+  //   })
+  // } else {
+  //   /*
+  //   !FH0
+
+  //   PREVENT ask all the resources */
+  //   formatResponse({
+  //     _actualFormat: req._format,
+  //     theResMethod: res,
+  //     theResBody: allMoviesJSON
+  //   })
+  // }
 })
 
 app.get("/movies/:id", (req, res) => {
@@ -113,4 +158,8 @@ app.listen(PORT, () => {
 !FH0
 CHALLENGE:
 - Add pagination. I think is is donde adding just a key to the resource that say which page is: like the first page is 1, the second page is 2, etc. And with that retrieve the ammount of data you want based on their possition
+
+
+
+- Check the methods OPTIONS, CONNECT, HEAD and TRACE
 */

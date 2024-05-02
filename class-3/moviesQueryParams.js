@@ -59,7 +59,7 @@ const QUERY_KEYS_LIST = Object.values(QUERY_KEYS).reduce((group, product) => {
   return group
 }, {})
 
-const moviesQueryParams = ({ allQueries, dataToFilter }) => {
+const moviesQueryParams = ({ allQueries, dataToFilter }, { pagination }) => {
   let filteredQueries = Object.entries(allQueries)
     .filter(([key]) => {
       if (key === QUERY_KEYS?.[key.toUpperCase()]?.["key"]) return true
@@ -85,7 +85,8 @@ const moviesQueryParams = ({ allQueries, dataToFilter }) => {
       }
     })
 
-  return dataToFilter.filter((xFilter) => {
+  const actualPage = pagination.pageFormatted
+  const dataFiltered = dataToFilter.filter((xFilter) => {
     let conditionsToCheck = []
     filteredQueries.forEach(({ key, value, typeFound }) => {
       if (typeFound === QUERY_KEYS_TYPE["isStringArr"]) {
@@ -140,6 +141,33 @@ const moviesQueryParams = ({ allQueries, dataToFilter }) => {
 
     return toReturn
   })
+
+  const totalAmountResourcesToShow = dataFiltered.length
+  const totalPages = Math.ceil(dataFiltered.length / pagination.limitFormatted)
+  const prevPage = actualPage > 1 ? actualPage - 1 : null
+  const nextPage = actualPage < totalPages ? actualPage + 1 : null
+  const surpassedTotalPages = actualPage > totalPages
+
+  const dataSliced = dataFiltered.slice(
+    pagination.offset,
+    pagination.limitFormatted + pagination.offset
+  )
+
+  const howMuchShowingNow = dataSliced.length
+  // const dataFilteredToReturn = dataFiltered.length !== 0 ? dataFiltered :
+
+  const objToReturn = {
+    data: dataSliced,
+    actualPage,
+    totalPages,
+    howMuchShowingNow,
+    totalAmountResourcesToShow,
+    prevPage,
+    nextPage,
+    surpassedTotalPages
+  }
+
+  return objToReturn
 }
 
 module.exports = { moviesQueryParams }
