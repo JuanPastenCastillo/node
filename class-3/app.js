@@ -31,13 +31,35 @@ Caveat 🟨:
 
 const express = require("express")
 const crypto = require("node:crypto")
+const cors = require("cors")
 const { validateMovie, validatePartialMovies } = require("./schemas/movies")
 const allMoviesJSON = require("./data/movies.json")
 const { toJSON } = require("./utils/toJSON")
 const { formatResponse } = require("./utils/formatResponse")
 const { moviesQueryParams } = require("./utils/moviesQueryParams")
+const { originChecked } = require("./utils/originChecked")
 
 const app = express()
+/* The problem with this without any option inside the cors is that allow all request from everyone. It use this *. But with the proper options/configuration, it can be behave the same way we have on the express native solution */
+// app.use(
+//   cors({
+//     origin: (origin, callback) => {
+//       const ACCEPTED_ORIGINS_INSIDE_LIBRARY = [
+//         "http://localhost:8080",
+//         "http://localhost:3000",
+//         "https://movies.com", // This is the production
+//         "https://juanpastencastillo.com"
+//       ]
+
+//       if (ACCEPTED_ORIGINS_INSIDE_LIBRARY.includes(origin) || !origin) {
+//         return callback(null, true)
+//       }
+
+//       return callback(new Error("Not allowed by CORS"))
+//     }
+//   })
+// )
+
 app.disable("x-powered-by")
 
 const ROUTES = {
@@ -45,28 +67,84 @@ const ROUTES = {
   HOME: "/"
 }
 
+const PORT = process.env.PORT ?? 3000
+const ACCEPTED_ORIGINS = [
+  "http://localhost:8080",
+  "http://localhost:3000",
+  "https://movies.com", // This is the production
+  "https://juanpastencastillo.com"
+]
+
 /* An endpoint of a path (some URL) where you have some resource to extract data*/
 app.get(ROUTES.HOME, (req, res) => {
   res.json({ message: "This is the endpoint for home" })
 })
 
 app.use((req, res, next) => {
-  if (req.method === "GET" && req.url.startsWith(ROUTES.MOVIES)) {
-    const { format = "json" } = req.query
+  if (req.url.startsWith(ROUTES.MOVIES)) {
+    if (req.method === "GET") {
+      const { acceptedOrigin, origin } = originChecked({
+        req,
+        ACCEPTED_ORIGINS
+      })
 
-    if (format.toLowerCase() === "json") {
-      req._format = "json"
+      if (!acceptedOrigin) {
+        return res.status(403).send({ error: "Origin not accepted" })
+      }
+
+      res.header("Access-Control-Allow-Origin", origin)
+
+      const { format = "json" } = req.query
+
+      if (format.toLowerCase() === "json") {
+        req._format = "json"
+
+        return next()
+      } else {
+        req._format = format.toLowerCase()
+        return next()
+      }
+    } else if (req.method === "POST" || req.method === "PATCH") {
+      toJSON({ req, next })
+    } else if (req.method === "DELETE" && /movies\/*/.test(req.url)) {
+      /*
+      The CORS is a little bit more stric with some methods:
+        - Normal methods: GET, HEAD and POST
+        - Complex methods: PUT, PATCH and DELETE
+      */
+      const { acceptedOrigin, origin } = originChecked({
+        req,
+        ACCEPTED_ORIGINS
+      })
+
+      if (!acceptedOrigin) {
+        return res.status(403).send({ error: "Origin not accepted" })
+      }
+
+      res.header("Access-Control-Allow-Origin", origin)
 
       return next()
+    } else if (req.method === "OPTIONS") {
+      const { acceptedOrigin, origin } = originChecked({
+        req,
+        ACCEPTED_ORIGINS
+      })
+
+      if (!acceptedOrigin) {
+        return res.status(403).send({ error: "Origin not accepted" })
+      }
+
+      res.header("Access-Control-Allow-Origin", origin)
+      res.header(
+        "Access-Control-Allow-Methods",
+        "GET, POST, PUT, PATCH, DELETE"
+      )
+      res.sendStatus(204)
     } else {
-      req._format = format.toLowerCase()
       return next()
     }
-  } else if (
-    (req.method === "POST" || req.method === "PATCH") &&
-    req.url.startsWith(ROUTES.MOVIES)
-  ) {
-    toJSON({ req, next })
+  } else {
+    return next()
   }
 })
 
@@ -221,7 +299,36 @@ One question, is it danger to create the ID from outside? The answer: it could b
 
 */
 
-const PORT = process.env.PORT ?? 3000
+app.delete(`${ROUTES.MOVIES}/:id`, (req, res) => {
+  const { id } = req.params
+  const movieIndex = allMoviesJSON.findIndex((movie) => {
+    return Number(movie?.id) === Number(id) || movie.id === id
+  })
+
+  if (movieIndex === -1) {
+    return res.status(404).json({ message: `Movie not found with id «${id}»` })
+  }
+
+  allMoviesJSON.splice(movieIndex, 1)
+  return res.json({ message: `Movie deleted with id «${id}»` })
+})
+
+/* You can solve the problem of CORS for DELETE here or you can use the native middleware of express on top of this file. The advantage do do it here is you have, natively the path-to-regex library. Above you have to use your own regex or install path-to-regex to use it */
+/*
+app.options(`${ROUTES.MOVIES}/:id`, (req, res) => {
+  const { acceptedOrigin, origin } = originChecked({
+    req,
+    ACCEPTED_ORIGINS
+  })
+  if (!acceptedOrigin) {
+    return res.status(403).send({ error: "Origin not accepted" })
+  }
+  res.header("Access-Control-Allow-Origin", origin)
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE")
+  res.sendStatus(204)
+})
+*/
+
 app.listen(PORT, () => {
   console.log(`Server listening on port http://localhost:${PORT}`)
 })

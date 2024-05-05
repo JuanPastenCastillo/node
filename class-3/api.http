@@ -225,3 +225,7 @@ Content-Type: application/json
   "title":"Even better, yeah!",
   "year": 2017
 }
+
+### DELETE
+DELETE http://localhost:3000/movies/4
+Content-Type: application/json
