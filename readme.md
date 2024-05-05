@@ -394,6 +394,41 @@
           </ul>
         </details>
       </li>
+      <li>
+        <details>
+            <summary>CORS: Cross Origin Resource Sharing</summary>
+            <ul>
+              <li>This only works on browsers not in servers. The CORS is a mechanism that restrict if a resource can be used on some origin. The browsers make the request to this resource. Here the browser on origin <code>http://localhost:8080/</code> aka <code>mywebsite.com</code> ask to <code>http://localhost:3000</code> aka <code>API.com</code> <i>Is true that <strong>mywebsite.com</strong> who is not you (of course the browser ask in this situation, if would not, it would not ask) is able to get resources from <strong>API.com</strong>?</i></li>
+              <li>When this is not possible the way from the API to say <strong>no</strong> is with the <strong>lack of headers</strong></li>
+              <li>This problem can only be solved in the backend: on the API, on proxy, in the router or on anything that can add the required header. Who should add that header? For now that's not important</li>
+              <li>The way to to solve this in express is adding this to the routes you want to enable <code>res.header("Access-Control-Allow-Origin", "http://localhost:8080")</code>. In this case <code>http://localhost:8080</code> would be <i><strong>mywebsite.com</strong></i></li>
+              <li>You can also replace the specific <code>http</code> site for this <code>*</code>, to enable all the request for anyone</li>
+              <li>Here is very possible that you don't know would be the origin, it would be <code>3000</code>, <code>8080</code>, <code>4500</code>, <code>1234</code>? So, the solution for this could be:
+                <ul>
+                  <li>Detect the origin and decide what to do. For example, you can have a list of <code>ACCEPTED_ORIGINS</code></li>
+                </ul>
+                <li>
+                  A caveat here 🟨: the <code>origin</code> header is not always sent by the browser. This is not send by the browser when the request is from the same origin. This mean, if I'm in the <code>http:localhost:3000</code> and I make a request to <code>http:localhost:3000</code> no <code>origin</code> header will sent
+                </li>
+                <li>Exist simples and complex methods with CORS:
+                  <ul>
+                    <li>Simples: <code>GET</code>, <code>HEAD</code> and <code>POST</code>
+                    </li>
+                    <li>Complex: <code>PUT</code>, <code>PATCH</code> and <code>DELETE</code>
+                      <ul>
+                        <li>This methods have something call <code>Preflight</code>, this mean that you need to add a call with the method <code>OPTIONS</code> in order to make them acceptable</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  At the end the problem with <code>CORS</code> is a problem of headers. You should be able to use <code>res.header("Access-Control-Allow-Origin", origin)</code> and <code>res.header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE")</code> to solve it in the correct place: in the middleware and/or where the request is made
+                </li>
+                <li>Is it possible to solve this using express or you can use a third party library call <code>cors</code>. Check the <code>app.js</code> file to check how to use it. One caveat 🟨 with that solution: it will solve adding an <code>*</code> to everything. In order to make that library behave as the native approach you have to pass it some options</li>
+              </li>
+            </ul>
+        </details>
+      </li>
     </li>
   </ol>
 </details>
