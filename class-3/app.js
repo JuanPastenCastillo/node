@@ -67,11 +67,10 @@ const ROUTES = {
   HOME: "/"
 }
 
-const PORT = process.env.PORT ?? 3000
 const ACCEPTED_ORIGINS = [
   "http://localhost:8080",
   "http://localhost:3000",
-  "https://movies.com", // This is the production
+  "https://movies.com", // This could be the production
   "https://juanpastencastillo.com"
 ]
 
@@ -329,6 +328,7 @@ app.options(`${ROUTES.MOVIES}/:id`, (req, res) => {
 })
 */
 
+const PORT = process.env.PORT ?? 3000
 app.listen(PORT, () => {
   console.log(`Server listening on port http://localhost:${PORT}`)
 })
