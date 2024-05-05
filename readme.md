@@ -435,4 +435,4 @@
 
 
 ## NOW
-- MCV Architecture and Deploy of API Rest
+- MVC Architecture and Deploy of API Rest
