@@ -435,4 +435,4 @@
 
 
 ## NOW
-- CORS and API Rest
+- MCV Architecture and Deploy of API Rest
