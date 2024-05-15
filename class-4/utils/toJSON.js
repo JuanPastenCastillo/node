@@ -1,4 +1,4 @@
-const toJSON = ({ req, next }) => {
+export const toJSON = ({ req, next }) => {
   let body = ""
   req.on("data", (chunk) => {
     body += chunk.toString()
@@ -10,5 +10,3 @@ const toJSON = ({ req, next }) => {
     next()
   })
 }
-
-module.exports = { toJSON }

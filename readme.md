@@ -438,15 +438,153 @@
   <ol>
     <li>
       <details>
-        <summary>Content 1</summary>
+        <summary>Environmental variables</summary>
         <ul>
-          <li></li>
+          <li>This should be always on <code>UPPERCASE</code></li>
+          <li>On express it can be used like this to deploy it on some service: 
+            <ol>
+              <li><code>const PORT = process.env.PORT ?? 3000</code></li>
+              <li><code>app.listen(PORT, () => { console.log(`Server listening on port http://localhost:${PORT}`)})</code></li>
+            </ol>
+          </li>
+        </ul>
+      </details>
+    </li>
+    <li>
+      <details>
+        <summary>Configuration on hosting</summary>
+        <ul>
+          <li>Normally the host ask you for a <code>start</code> script on the <code>package.json</code> to run the file or maybe it will ask on the configuration</li>
+        </ul>
+      </details>
+    </li>
+    <li>
+      <details>
+        <summary>ESModules</summary>
+        <ul>
+          <li>In order to use the ESModules instead the commonJS approach, you can go into your package.json and add this <code>"type": "module"</code>. With that you will be able to use the ESModules without change the extension of the files. But at the same time, you will not be able to use the commonJS approach without change the extension of the file</li>
+          <li>When you import some module is a good practice put the extention, like this <code>import { QUERY_KEYS, moviesQueryParams } from "./utils/moviesQueryParams.js"</code>. As developer we are bas used to not put the extension at the end, because we are lazy, because TypeScript, because builders</li>
+          <li>On ESModules import json is not allow directly <code>import allMoviesJSON from "./data/movies.json"</code> you can do it with different approaches:
+            <ul>
+              <li><code>import allMoviesJSON from "./data/movies.json" assert { type: "json" }</code> → This is not recommended because the <code>assert</code> will stop work at some point</li>
+              <li><code>import allMoviesJSON from "./data/movies.json" with { type: "json" }</code> → Change the <code>assert</code> for <code>with</code> </li>
+              <li>
+                <ol>
+                  <li><code>import fs from "node:fs"</code></li>
+                  <li><code>const allMoviesJSON = JSON.parse(fs.readFileSync("./data/movies.json", "utf-8"))</code></li>
+                </ol>
+              </li>
+              <li>
+                Recommended (until the import of JSON will be native on ESModules): create a require (this is more performante)
+                <ol>
+                  <li><code>import { createRequire } from "node:module"</code></li>
+                  <li><code>const require = createRequire(import.meta.url)</code></li>
+                  <li><code>const allMoviesJSON = require("./data/movies.json")</code></li>
+                </ol>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </details>
+    </li>
+    <li>
+      <details>
+        <summary>MVC: Model, View, Controller</summary>
+        <ul>
+          <li>Exist some debate if the MVC is a <code>Design Pattern</code> or a <code>Architecture Patterns</code>. It seems more like an architecture. Nonetheless, it doesn't explain everything because it doesn't tell you how to implement the <code>View</code></li>
+          <li>This is highly used on web and mobile applications but other frameworks also work like this, like <code>ruby on rails</code>, <code>Django</code>, <code>ASP.net</code> and others</li>
+          <li>
+            This architecture forces you to separate the application in three main component that work togheter, the Mode, the View and the Controller
+          </li>
+          <li>
+            Exist several iteration of this architecture. But the one we going to see here is the most classic one
+          </li>
+          <li><code>Model:</code>
+           <ul>
+            <li>This is the logic of the business, the data structure, inner rules of the business</li>
+            <li>
+              This is in charge of access the database, update the data, check if the integrity of the data are correct (for example, if you try to create and ID, that ID shouldn't exist)
+            </li>
+           </ul>
+          </li>
+          <li><code>View:</code>
+           <ul>
+            <li>This is the most important part for the user: with this the user will interact because the user cannot interact with the Model neither the Controller</li>
+            </ul>
+          </li>
+          <li><code>Controller:</code>
+           <ul>
+              <li>This is an intermediary between the Model and the View, this respond to the entries of the user every time they make on. This part of the application is responsable for know what to do with the model. Is like an Orchestrator</li>
+            </ul>
+          </li>
+          <li>
+              This three parts should work togheter. First the controller will ask for data to the <code>Model</code>, the model will return the data to the <code>Controller</code> and after that it will init the <code>View</code>. After that the user throught the <code>View</code> will interact wanting something happen. With that interact of the user the <code>Controller</code> will act asking for the correct data to the <code>Model</code>, generally speaking having the <code>CRUD</code> approach here with them
+          </li>
+          <li>
+            Remember here, from the <code>View</code> is not possible to interact directly with the <code>Model</code>. But is possible indirectly because the user, at the end, make some request to the <code>Model</code> through the <code>Controller</code>
+          </li>
+          <li>
+            The advantage of this is the separation of the responsabilities on the application, specially the Logic of the Business (<code>Model</code>), because this is the most important thing on the application when it have to connect to a database. This will help to scalability and test, to name some
+          </li>
+          <li>Examples:
+            <ul>
+              <li><code>View</code>:
+                <ul>
+                  <li><code>React</code></li>
+                  <li><code>Vue</code></li>
+                </ul>
+              </li>
+              <li><code>Controller</code>:
+                <ul>
+                  <li><code>Express</code></li>
+                  <li><code>DJango</code></li>
+                </ul>
+              </li>
+              <li><code>Model</code>:
+                <ul>
+                  <li><code>mySQL</code></li>
+                  <li><code>mongoDB</code></li>
+                  <li>Local</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>
+            The goal is have black boxes that interact with each other. Each one should know how to interact with the other but it doesn't whould know how them interanally make their things. This is the key of architecture and clean code: separation of by layers, separation of concepts
+          </li>
+          <li>
+            In the code is not neccesary that the <code>Model</code> and the <code>Controll</code> share the same names for the methods. Even sometimes you will need to call more than one <code>Model</code> from the <code>Controller</code>
+          </li>
+          <li>Validations:
+            <ul>
+              <li>This happend along all the aplication: <code>Model</code>, <code>View</code>, <code>Controller</code> but is made in different ways depending on the category</li>
+              <li><code>Controller</code>: usually here the validation is of format and coherence of the data received, to be possible to be procesed before send it to the <code>Model</code>. When it comes from the input from the user, is a good thing to validate the data before to send it to the <code>Model</code>. With this validation you allow the data is correct to be used or to avoid attacks</li>
+              <li><code>Model</code>: usually the validation here are for the business rules, data coherence, data persistant in the database and others like check the ID</li>
+              <li>The <code>View</code> is the most useless for the business logic but is the most important in terms of user experience</li>
+              <li>Is debatable if the <code>Model</code> can have some method that say which field allow and with wich type, like a integer, a string and so son. That method can be exported into the <code>Controller</code> to make the validation there. Here the validation will stay apply in the <code>Model</code> but it will be used, also, by the <code>Controller</code> </li>
+              <li>With this said: validation on <code>Model</code> and <code>Controller</code> are mandatory, validations on <code>View</code> are optional (very interesting)</li>
+            </ul>
+          </li>
+        </ul>
+      </details>
+    </li>
+    <li>
+      <details>
+        <summary>Difference between <code>Design Pattern</code> and <code>Architecture Pattern</code></summary>
+        <ul>
+          <li>The <code>Design Pattern</code>: is an easy, repeteable, to solve something specific in a part of the code. For example:
+            <ol>
+              <li>Pattern Observer</li>
+              <li>Pattern Factory</li>
+              <li>Pattern Modules</li>
+            </ol>
+          </li>
+          <li>The <code>Architecture Pattern</code> has to do with all your application: how to implement everything</li>
         </ul>
       </details>
     </li>
   </ol>
 </details>
-  
 
 
 ## NOW

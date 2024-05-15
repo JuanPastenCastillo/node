@@ -191,22 +191,6 @@ Content-Type: application/json
   ]
 }
 
-### Create a new movie wrong: should throw. A full explanation should be showed on the console
-POST http://localhost:3000/movies
-Content-Type: application/json
-
-{
-  "title": 999,
-  "year": "1975",
-  "director": true,
-  "duration": 0,
-  "poster": "https://czxczxczxc",
-  "genre": [
-    "Drama",
-    "jaajajajaj"
-  ]
-}
-
 ### Update a movie: correct
 PATCH http://localhost:3000/movies/23
 Content-Type: application/json
@@ -224,6 +208,22 @@ Content-Type: application/json
   "id": "better_strong_id_0123456789",
   "title":"Even better, yeah!",
   "year": 2017
+}
+
+### Create a new movie wrong: should throw. A full explanation should be showed on the console
+POST http://localhost:3000/movies
+Content-Type: application/json
+
+{
+  "title": 999,
+  "year": "1975",
+  "director": true,
+  "duration": 0,
+  "poster": "https://czxczxczxc",
+  "genre": [
+    "Drama",
+    "jaajajajaj"
+  ]
 }
 
 ### DELETE

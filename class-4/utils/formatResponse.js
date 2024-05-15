@@ -1,4 +1,4 @@
-const formatResponse = ({ _actualFormat, theResMethod, theResBody }) => {
+export const formatResponse = ({ _actualFormat, theResMethod, theResBody }) => {
   if (_actualFormat === "json") {
     return theResMethod.json(theResBody)
   } else if (_actualFormat === "html") {
@@ -36,5 +36,3 @@ const formatResponse = ({ _actualFormat, theResMethod, theResBody }) => {
       .send({ error: `Bad format used «${_actualFormat}»` })
   }
 }
-
-module.exports = { formatResponse }

@@ -1,4 +1,4 @@
-const z = require("zod")
+import z from "zod"
 
 const movieSchema = z.object({
   title: z.string({
@@ -56,16 +56,10 @@ const movieSchema = z.object({
   basedOnBook: z.boolean().nullable().default(null)
 })
 
-const validateMovie = ({ objectToValidate }) => {
-  /*
-  You can validate the data with the method "parse" or you can use "safeParse". With "safeParse" you will have a object result with data or errors. You can even use the safeParseAsync to avoid blocking the request
-  return movieSchema.parse(objectToValidate)
-  */
+export const validateMovie = ({ objectToValidate }) => {
   return movieSchema.safeParse(objectToValidate)
 }
 
-const validatePartialMovies = ({ objectToValidate }) => {
+export const validatePartialMovies = ({ objectToValidate }) => {
   return movieSchema.partial().safeParse(objectToValidate)
 }
-
-module.exports = { validateMovie, validatePartialMovies }
