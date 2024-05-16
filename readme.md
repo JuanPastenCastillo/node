@@ -580,12 +580,28 @@
             </ol>
           </li>
           <li>The <code>Architecture Pattern</code> has to do with all your application: how to implement everything</li>
+          <li>The architecture on software development make sense when you work on business with products or services. In order to be a Software Engineering, you need to create products that scale, be maintainable and work</li>
         </ul>
       </details>
     </li>
   </ol>
 </details>
 
+<details>
+  <summary>
+    class-5: Creation of a database with mySQL and evoiding hackers (good practices)
+  </summary>
+  <ul>
+    <li><code>...</code></li>
+  </ul>
+  
+</details>
+
 
 ## NOW
-- MVC Architecture and Deploy of API Rest
+- Creation of a database with mySQL and avoiding hackers (good practices)
+
+## Pending
+1. Connect mongoDB with express 
+2. Learn how to use mongoose with express
+3. Know how to make an dependency injection
