@@ -603,5 +603,9 @@
 
 ## Pending
 1. Connect mongoDB with express 
+  - Perform a `CRUD` with the database using mongoDB
+  - Special enphasis on `GET` with the query
 2. Learn how to use mongoose with express
+   - Perform a `CRUD` with the database using mongoose
+   - Special enphasis on `GET` with the query
 3. Know how to make an dependency injection
