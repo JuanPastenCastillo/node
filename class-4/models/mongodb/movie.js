@@ -23,11 +23,6 @@ async function connect() {
   }
 }
 
-/* 
-!FH0
-  - All this methods should be behave the same as the methods created for the movies.json
-  - Right now, it should be possible to make "Dependency Inyection"
-*/
 export class MovieModel {
   static async getAll({ genre }) {
     const db = await connect()

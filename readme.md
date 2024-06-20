@@ -592,7 +592,62 @@
     class-5: Creation of a database with mySQL and evoiding hackers (good practices)
   </summary>
   <ul>
-    <li><code>...</code></li>
+    <li>A database is a collection of data interrelated and saved without unnecessary redundancy</li>
+    <li>All database should allow insertion, modification and delete of data </li>
+    <li>There's two type fo data in a database:
+      <ul>
+        <li>Date from users: created by the user</li>
+        <li>Data of the system: data that the database use for their management. For example: which user have access to the database</li>
+      </ul>
+      </li>
+    <li>
+      The characteristics of a database:
+      <ul>
+        <li>Versatile: depending of the user and application, it should behave acordly</li>
+        <li>Performance: should have the enough speed for every client that make request to the database</li>
+        <li>Low redundancy: should be the lowest possible</li>
+        <li>High access capacity to gain the most possible time on requests</li>
+        <li>High index of integrity: if any amount of user try to use the database, this should not fail for create new data, have redundancy or for slow updating</li>
+        <li>Very high security and privacy. This taking in mind not only the software but also the hardware: fire, stealing, and so on</li>
+        <li>Should receive periodic updates to avoid obsolescence</li>
+      </ul>
+    </li>
+    <li>
+      User should not know how the data is organized and saved. Becuase of this the data should be presented to the user in a easy way to be interpreted y modified. With this: exist three principals levels on for the user interact with the database:
+      <ul>
+        <li>Intern level: closest level for the physical storage. It allow to write like is in the computer. Here you have the configuration files: files that have the data, direction of the files and organization</li>
+        <li>Conceptual level: The data that will be used is presented without having in mind the Intern Level.</li>
+        <li>Extern level: the closest to the user. Here the data that the user want is writen (totally or partially)</li>
+      </ul>
+      A database can have only one Intern Level, only one Conceptual level but many External Levels
+    </li>
+    <li>The data within a database are naturally related, for example: a product belong a category and is associated with multiple tags. The term for this is <code>Relational Database</code></li>
+    <li>A <code>Relational Database</code> is like a spreadsheet: a <code>table</code> is a page, that contain <code>columns</code> and <code>rows</code>. A <code>table</code> can relate to another <code>table</code> using various type of relationships like <code>one-to-one</code> and <code>one-to-many</code> </li>
+    <li>What is <code>SQL</code>
+      <ul>
+        <li>The acronmyn <code>SQL</code> stands for <b>Structured Query Language</b>. This is the standarized language to access the database </li>
+        <li><code>SQL</code> is composed of three parts:
+          <ol>
+            <li><b>Data Definition Language</b> (<code>DDL</code>): includes statements for defining the database and its objects such as tables, views, triggers, stored procedures, etc</li>
+            <li><b>Data Manipulation Language</b> (<code>DML</code>): contains statements for updating and querying data</li>
+            <li><b>Data Control Language</b> (<code>DCL</code>): allows you to grant permissions to users to access specific data in the database</li>
+          </ol>
+        </li>
+      </ul>
+    </li>
+    <li>Important <code>SQL</code> commands:
+      <ul>
+        <li><code>start transaction;</code>: this is for make changes without commit it. With this you can make changes safely without worring to mess it up. In this state you can use the <code>rollback</code> to revert the changes. And when you be happy with your changes, you can use the <code>commit;</code> in order to apply all the changes</li>
+      </ul>
+    </li>
+    <li>What is <code>MySQL</code>
+      <ul>
+        <li>Is a robust database management system designed for managing relational databases. It is open-source software supported by <code>Oracle</code>, meaning that you can use <code>MySQL</code> without any cost. Additionally, you will have the flexibility to modify its source code to tailor it to your specific requirements</li>
+        <li>When compared to other database software like <code>Oracle Database</code> or <code>Microsoft SQL Server</code>, <code>MySQL</code> is relatively easy to master</li>
+        <li><code>MySQL</code> is versatile and can run on various platforms, including <code>UNIX</code>, <code>Linux</code>, and <code>Windows</code></li>
+        <li><code>MySQL</code> is renowned for its reliability, scalability, and speed</li>
+      </ul>
+    </li>
   </ul>
   
 </details>
