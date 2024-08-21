@@ -588,9 +588,7 @@
 </details>
 
 <details>
-  <summary>
-    class-5: Creation of a database with mySQL and evoiding hackers (good practices)
-  </summary>
+  <summary>class-5: Creation of a database with mySQL and evoiding hackers (good practices)</summary>
   <ul>
     <li>A database is a collection of data interrelated and saved without unnecessary redundancy</li>
     <li>All database should allow insertion, modification and delete of data </li>
@@ -688,14 +686,69 @@
 </details>
 
 
+<details>
+  <summary>class-6: Chat in real time with node, socke.tio, sql, html & css</summary>
+  <ul>
+    <li>Available protocols
+      <ul>
+        <li><code>HTTP</code>: this is the more used on internet</li>
+        <li><code>FTP</code></li>
+        <li><code>DNS</code></li>
+        <li><code>WebSockets</code>: usually real time chats use this protocol</li>
+        <li>And many more...</li>
+      </ul>
+     </li>
+     <li>What about <code>Transmission Control Protocol (TCP)</code>? This is for reliable delivery data packets
+  </ul>
+  <ul>
+    <li>Difference between <code>HTTP</code> and <code>WebSockets</code>
+      <ul><code>HTTP</code>
+        <li>Stateless: this allow the resource be 'cacheable', this mean if you want something that is always the same, the request should return all the time the same resource, like some text or image. Usually this is the case</li>
+        <li>Use cases: html, js, images, rest API (CRUD), unidirectional, cheap process with high latency</li>
+        <li>Is not Event Driven</li>
+      </ul>
+      <ul><code>WebSockets</code>
+        <li>Stateful: is not 'cacheable', is doesn't make sense some resource of a chat have this property</li>
+        <li>Use cases: realtime, low latency data (high frequency communication), bidirectional information</li>
+        <li>Is based on Events</li>
+      </ul>
+    </li>
+  </ul>
+  <ul> Making an real time chat:
+    <li>With <code>HTTP</code>: the user make a request to the server and the server provide a response. Further responses will require more requests. This is basically how internet works. To achive a real time (chat) you should use something call "polling", this mean, every <code>x</code> amount of time you will ask to the server if you have new data to serve. This is not real time. The problem with this approach is every request contain so much information, not only what we want plus the latency.
+      <ul>
+        <li>Other way to make it <code>HTTP Server Events</code>: this is very interesting but remain unidirectional</li>
+      </ul>
+    </li>
+    <li>With <code>WebSockets</code>: the user make an "Initial HTTP handshake", you tell to server "I want to initiate the data transfer, I'm using WebSockets" (is always the user who made the first conextion and is the server who decide to accept or not the conextion with WebSockets). After the first petition the conextion will persist with <code>WebSockets</code>, this mean the user can send data to the server at any time but also, the server can send data to the user at any time. The conextion can be closed by the user of by the server. The magic of a "real-time-something" happen when the conextion is live.</li>
+    <li>Both, <code>HTTP</code> and <code>WebSockets</code> uses <code>TCP</code></li>
+    <li>More advances concepts would be: multi, full, half duplex:
+      <ul>
+        <li>Full: Allows data to be transmitted in both directions simultaneously over a single connection. Example: <code>WebSockets</code></li>
+        <li>Half: Data can be transmitted in both directions, but not simultaneously. Typically, one direction is active while the other is passive. Example: <code>HTTP</code> and <code>HTTP/2</code> </li>
+        <li>Multi: The ability to transmit multiple streams of data over a single connection concurrently. Example: <code>HTTP/2</code></li>
+      </ul>
+       </li>
+  </ul>
+  
+</details>
+
+
 ## NOW
-- Creation of a database with mySQL and avoiding hackers (good practices)
+- Chat in real time with nodejs, socket.io, sql, html and css
 
 ## Pending
-1. Connect mongoDB with express 
+1. Learn how to make authentication and authorization
+  - Authjs
+  - Passport
+  - Clerkl
+  - Oauth 2.0
+  - NextAuth
+  - Jason Web TOkens (JWT)
+  - Redis (or similar)
+2. MongoDB:
+  - How to use it with expressjs
   - Perform a `CRUD` with the database using mongoDB
-  - Special enphasis on `GET` with the query
-2. Learn how to use mongoose with express
-   - Perform a `CRUD` with the database using mongoose
-   - Special enphasis on `GET` with the query
-3. Know how to make an dependency injection
+3. Learn how to use mongoose with express
+  - How to use it with expressjs
+  - Perform a `CRUD` with the database using mongoose
