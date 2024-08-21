@@ -1,10 +1,12 @@
 {
-  "name": "class-3",
+  "name": "class-5",
   "version": "1.0.0",
-  "description": "class-3: cors and API REST with express",
+  "description": "class-5: Creation of a database with mySQL and evoiding hackers (good practices)",
   "main": "app.js",
   "type": "module",
   "scripts": {
+    "start:mysql": "node --env-file=.env --watch servers/server-mysql.js",
+    "start:local": "node --env-file=.env --watch servers/server-local.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -14,6 +16,7 @@
     "cors": "2.8.5",
     "express": "4.19.2",
     "mongodb": "6.6.2",
+    "mysql2": "^3.10.1",
     "zod": "3.23.5"
   },
   "devDependencies": {

@@ -12,7 +12,7 @@ export const formatResponse = ({ _actualFormat, theResMethod, theResBody }) => {
       <p>Director: ${movie.director}</p>
       <p>Duration: ${movie.duration} minutes</p>
       <img src="${movie.poster}" alt="${movie.title} Poster" />
-      <p>Genre: ${movie.genre.join(", ")}</p>
+      <p>Genre: ${movie.genre}</p>
       <p>Rate: ${movie.rate}</p>
     </div>`
         })
@@ -24,7 +24,7 @@ export const formatResponse = ({ _actualFormat, theResMethod, theResBody }) => {
       <p>Director: ${theResBody.director}</p>
       <p>Duration: ${theResBody.duration} minutes</p>
       <img src="${theResBody.poster}" alt="${theResBody.title} Poster" />
-      <p>Genre: ${theResBody.genre.join(", ")}</p>
+      <p>Genre: ${theResBody.genre}</p>
       <p>Rate: ${theResBody.rate}</p>
     </div>`
     }

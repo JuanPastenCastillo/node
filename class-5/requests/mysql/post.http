@@ -1,0 +1,82 @@
+### Create a new movie. On the API you should be able to receive anything, the key is how the API will process the data and how they'r going to return the data. With this said: the API should not be blocked because the data they receive, not for the type of data neither because the order. In this case the "sql" key and value is ignored, it doesn't have problem
+POST http://localhost:3000/movies
+Content-Type: application/json
+
+{
+  "sql": "SELECT * FROM users",
+  "title": "The Godfather -- DEV_94",
+  "year": 1999,
+  "director": "Juanito Péeeeeeh!",
+  "duration": 199,
+  "poster": "https://img.fruugo.com/product/4/49/14441494_max.jpg",
+  "genre": [
+    "crime"
+  ]
+}
+
+### POST here. Should NOT work because the genre "anime" is accepted for zod but not for the database.
+POST http://localhost:3000/movies
+Content-Type: application/json
+
+{
+  "sql": "SELECT * FROM users",
+  "title": "The Godfather -- DEV_7", 
+  "year": 1975,
+  "director": "Francis Ford Cappola",
+  "duration": 175,
+  "poster": "https://img.fruugo.com/product/4/49/14441494_max.jpg",
+  "genre": [
+    "anime"
+  ]
+}
+
+### POST here. Should work. 
+POST http://localhost:3000/movies
+Content-Type: application/json
+
+{
+  "sql": "SELECT * FROM users",
+  "title": "The Godfather -- DEV_1", 
+  "year": 1975,
+  "director": "Francis Ford Cappola",
+  "duration": 175,
+  "poster": "https://img.fruugo.com/product/4/49/14441494_max.jpg",
+  "genre": [
+    "animation",
+    "biography"
+  ]
+}
+
+### POST here. Should work.
+POST http://localhost:3000/movies
+Content-Type: application/json
+
+{
+  "sql": "SELECT * FROM users",
+  "title": "The Godfather -- DEV_97", 
+  "year": 1988,
+  "director": "Francis Ford Cappola",
+  "duration": 201,
+  "poster": "https://img.fruugo.com/product/4/49/14441494_max.jpg",
+  "genre": [
+    "animation",
+    "biography",
+    "adventure"
+  ]
+}
+
+### Create a new movie wrong: should throw. A full explanation should be showed on the console
+POST http://localhost:3000/movies
+Content-Type: application/json
+
+{
+  "title": 999,
+  "year": "1975",
+  "director": true,
+  "duration": 0,
+  "poster": "https://czxczxczxc",
+  "genre": [
+    "Drama",
+    "jaajajajaj"
+  ]
+}

@@ -1,11 +1,12 @@
 import z from "zod"
+import { KEYS_SQUEMA } from "../utils/models/mySQL/keys.js"
 
 const movieSchema = z.object({
-  title: z.string({
+  [KEYS_SQUEMA["title"]]: z.string({
     invalid_type_error: "Movie title must be a string",
     required_error: "Movie title is required"
   }),
-  year: z
+  [KEYS_SQUEMA["year"]]: z
     .number({
       invalid_type_error: "Movie year must be a number",
       required_error: "Movie year is required"
@@ -13,37 +14,39 @@ const movieSchema = z.object({
     .int()
     .min(1906)
     .max(new Date().getFullYear() + 1),
-  director: z.string({
+  [KEYS_SQUEMA["director"]]: z.string({
     invalid_type_error: "Movie director must be a string",
     required_error: "Movie director is required"
   }),
-  duration: z
+  [KEYS_SQUEMA["duration"]]: z
     .number({
       invalid_type_error: "Movie duration must be a number",
       required_error: "Movie duration is required"
     })
     .int()
     .positive(),
-  poster: z.string().url({
+  [KEYS_SQUEMA["poster"]]: z.string().url({
     message: "Poster must be a valid URL"
   }),
-  genre: z
+
+  [KEYS_SQUEMA["genre"]]: z
     .enum([
-      "Action",
-      "Adventure",
-      "Animation",
-      "Biography",
-      "Crime",
-      "Drama",
-      "Fantasy",
-      "Romance",
-      "Sci-Fi"
+      "action",
+      "adventure",
+      "animation",
+      "biography",
+      "crime",
+      "drama",
+      "fantasy",
+      "romance",
+      "sci-fi",
+      "anime"
     ])
     .array({
       required_error: "Movie genre is required",
       invalid_type_error: "Movie genre must be an array of enum Genre"
     }),
-  rate: z
+  [KEYS_SQUEMA["rate"]]: z
     .number({
       invalid_type_error: "Movie rate must be a number",
       required_error: "Movie rate is required"
@@ -52,8 +55,9 @@ const movieSchema = z.object({
     .max(10)
     .nullable()
     .default(null),
-  oscar: z.boolean().nullable().default(null),
-  basedOnBook: z.boolean().nullable().default(null)
+  [KEYS_SQUEMA["oscar"]]: z.boolean().nullable().default(null),
+  [KEYS_SQUEMA["basedonbook"]]: z.boolean().nullable().default(null),
+  [KEYS_SQUEMA["overwrite"]]: z.boolean().nullable().default(null)
 })
 
 export const validateMovie = ({ objectToValidate }) => {

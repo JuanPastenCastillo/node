@@ -1,0 +1,73 @@
+### Update a movie: correct. The id "c74d68dc-4eea-11ef-85ab-309c230d3d69" is for "The Godfather -- DEV_1" title movie | action, adventure, biography, crime + (romance && fantasy)
+PATCH http://localhost:3000/movies/c74d68dc-4eea-11ef-85ab-309c230d3d69
+Content-Type: application/json
+
+{
+  "title":"A new better title =) - 00003",
+  "year": 2019,
+  "duration": 999,
+  "should_ignore": true,
+  "oscar": false,
+  "genre": [
+    "animation",
+    "drama"
+  ]
+}
+
+
+### SOME GET
+GET http://localhost:3000/movies/c74d68dc-4eea-11ef-85ab-309c230d3d69
+
+
+### Update a movie: correct. The id "c74d68dc-4eea-11ef-85ab-309c230d3d69" is for "the godfather -- dev_PATCH_99" title movie
+PATCH http://localhost:3000/movies/c74d68dc-4eea-11ef-85ab-309c230d3d69
+Content-Type: application/json
+
+{
+  "director": "John Salchi John - PATCHED_3",
+  "oscar": true,
+  "title": "the godfather -- dev_PATCH_999",
+  "basedonbook": false,
+  "rate": 9
+}
+
+### Update a movie: correct. The id "0aa347ce-5d94-11ef-982f-309c230d3d69" is for genres 
+PATCH http://localhost:3000/movies/0aa347ce-5d94-11ef-982f-309c230d3d69
+Content-Type: application/json
+
+{
+  "genre":[
+    "drama"
+  ]
+}
+
+### Update a movie: correct with override. The id "0aa347ce-5d94-11ef-982f-309c230d3d69" is for genres 
+PATCH http://localhost:3000/movies/0aa347ce-5d94-11ef-982f-309c230d3d69
+Content-Type: application/json
+
+{
+  "genre":[
+    "anime"
+  ],
+  "overwrite": true
+}
+
+### Update a movie: incorrect. The genre crime is already on the database
+PATCH http://localhost:3000/movies/c74d68dc-4eea-11ef-85ab-309c230d3d69
+Content-Type: application/json
+
+{
+  "genre":[
+    "crime"
+  ]
+}
+
+### Update a movie: incorrect. This will update what it can but not the things that are not in the schema, in this case the ID. This is like the "sql" ignore of above
+PATCH http://localhost:3000/movies/23
+Content-Type: application/json
+
+{
+  "id": "better_strong_id_0123456789",
+  "title":"Even better, yeah!",
+  "year": 2017
+}
