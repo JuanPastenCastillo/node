@@ -2,7 +2,7 @@
 
 const promise1 = Promise.resolve(3)
 const promise2 = new Promise((resolve, reject) =>
-  setTimeout(reject, 100, "foo"),
+  setTimeout(reject, 100, "foo")
 )
 const promise3 = Promise.resolve(["resolved", 99])
 
@@ -25,7 +25,7 @@ const promises = [
   promise7,
   promise8,
   promise9,
-  promise10,
+  promise10
 ]
 
 /**
@@ -52,7 +52,7 @@ const getValues = async ({ thePromises }) => {
   return await Promise.allSettled(thePromises).then((x) => {
     let allObj = {
       rejected: [],
-      fulfilled: [],
+      fulfilled: []
     }
 
     x.forEach((y) => {

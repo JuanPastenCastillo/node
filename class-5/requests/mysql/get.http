@@ -4,29 +4,62 @@ GET http://localhost:3000/
 ### Get all movies
 GET http://localhost:3000/movies
 
+### Get all movies
+GET http://localhost:3000/movies?durationFrom=150
+
+### Get all movies
+GET http://localhost:3000/movies?limit=3&format=html
+
+### Get all movies
+GET http://localhost:3000/movies?page=3
+
+### Get all movies
+GET http://localhost:3000/movies?liMIt=3
+
+### Get all movies
+GET http://localhost:3000/movies?liMIt=3; SELECT * from movie; --
+
 ### Get all movies on HTML
 GET http://localhost:3000/movies?format=html
 
 ### Get all movies bad format
 GET http://localhost:3000/movies?format=LALALA
 
+### Get some movie by id: KEYS. Should not be return any key
+GET http://localhost:3000/movies/KEYS
+
+### Get some movie with wrong id: dasdasdda
+GET http://localhost:3000/movies/dasdasdda
+
 ### Get some movie by id: 1
-GET http://localhost:3000/movies/1
+GET http://localhost:3000/movies/c74d68dc-4eea-11ef-85ab-309c230d3d69
+
+### Get some movie by id: 1 but is an SQL inyection, 1° way
+GET http://localhost:3000/movies/c74d68dc-4eea-11ef-85ab-309c230d3d69; SELECT * from movie; --
+
+### Get some movie by id: 1 but is an SQL inyection, 2° way
+GET http://localhost:3000/movies/; SELECT * from movie; --
+
+### Get some movie by id: 1 but is an SQL inyection, 3° way
+GET http://localhost:3000/movies/SELECT * from movie; --
+
+### Get some movie by id: 1 but is an SQL inyection, 4° way
+GET http://localhost:3000/movies/'SELECT * from movie;' --
 
 ### Get some movie by id: 2
-GET http://localhost:3000/movies/2
+GET http://localhost:3000/movies/d3dbda24-38a7-11ef-9dd9-309c230d3d69
 
 ### Get some movie by id (1) and HTML
-GET http://localhost:3000/movies/1?format=html
+GET http://localhost:3000/movies/d3dbd59a-38a7-11ef-9dd9-309c230d3d69?format=html
 
 ### Get some movie by id (2) and HTML
-GET http://localhost:3000/movies/2?format=html
+GET http://localhost:3000/movies/d3dbda24-38a7-11ef-9dd9-309c230d3d69?format=html
 
 ### Get some movie by id (1) and bad format
-GET http://localhost:3000/movies/1?format=LALALA
+GET http://localhost:3000/movies/d3dbd59a-38a7-11ef-9dd9-309c230d3d69?format=LALALA
 
 ### Get some movie by id (2) and bad format
-GET http://localhost:3000/movies/2?format=LELELE
+GET http://localhost:3000/movies/d3dbda24-38a7-11ef-9dd9-309c230d3d69?format=LELELE
 
 ### Get some movie by wrong id: 999 
 GET http://localhost:3000/movies/999
@@ -36,11 +69,23 @@ GET http://localhost:3000/movies/999
 ### The filter by query params is below
 ### There's no a good way or a bad way to do it, all depend on what you understand what is an entity and a resource, what is a filter and what's not. This depend more on the logic of the business, of the product: is not the same for a coin collector the identification of the coin (an entity inside the business) but for a regular online business it doesn't care about the type of coin meanwhile be just accepted money and how much of that it is
 
+### Filter by other genre Action
+GET http://localhost:3000/movies
+
 ### Filter by other genre Action, case insensitive
-GET http://localhost:3000/movies?genre=Action
+GET http://localhost:3000/movies?title=inception
+
+### Filter by other genre Action, case insensitive
+GET http://localhost:3000/movies?genRe=Action
 
 ### Filter by other genre action, case insensitive
 GET http://localhost:3000/movies?genre=action
+
+### Filter by other genre action & adventure, case insensitive
+GET http://localhost:3000/movies?genre=ACTION&genre=ADVENTURE
+
+### Filter by other genre action & SCI-FI, case insensitive
+GET http://localhost:3000/movies?genre=ACTION&genre=sci-Fi
 
 ### Filter by other genre Adventure, case insensitive
 GET http://localhost:3000/movies?genre=Adventure
@@ -63,7 +108,6 @@ GET http://localhost:3000/movies?genre=Fantasy&format=html
 ### Search with a filter of rate: from 9
 GET http://localhost:3000/movies?rateFrom=9
 
-
 ### Search with a filter of rate: from 9.4
 GET http://localhost:3000/movies?rateFrom=9.4
 
@@ -85,8 +129,23 @@ GET http://localhost:3000/movies?oscar=false
 ### Search with a filter of movies that doesn't won an oscar plus pagination
 GET http://localhost:3000/movies?oscar=false&page=2
 
+### Search with a filter of movies that doesn't won an oscar plus pagination
+GET http://localhost:3000/movies?oscar=false&page=3
+
 ### Search with a filter of director's name
 GET http://localhost:3000/movies?director=James_Cameron
+
+### Search with a filter of director's name with limit = 2
+GET http://localhost:3000/movies?director=James_Cameron&LimIt=2
+
+### Search with a filter of director's name with SQL Inyection
+GET http://localhost:3000/movies?director=JAMES_Cameron; SELECT * FROM movie; --&LimIt=2
+
+### Search with a filter of director's name, genre action, don't won an oscar, is based on a book and have a rate equal or higher than 9.5
+GET http://localhost:3000/movies?director=James_Cameron&genre=ACTION
+
+### Search with a filter of director's name, genre action, don't won an oscar, is based on a book and have a rate equal or higher than 9.5
+GET http://localhost:3000/movies?director=James_Cameron&genre=ACTION&limit=2&page=2
 
 ### Search with a filter of director's name, genre action, don't won an oscar, is based on a book and have a rate equal or higher than 9.5
 GET http://localhost:3000/movies?director=James_Cameron&genre=ACTION&notFounded=true&oscar=false&basedOnBook=true&rateFrom=9.5
@@ -97,8 +156,11 @@ GET http://localhost:3000/movies?director=James_Cameron&genre=ACTION&notFounded=
 ### Search with a filter of director's name, genre action, won an oscar, is based on a book and have a rate until 8.6
 GET http://localhost:3000/movies?director=James_Cameron&genre=ACTION&notFounded=true&oscar=true&basedOnBook=true&rateUntil=8.6
 
+### Search with a filter of director's name, genre action, won an oscar, is based on a book and have a rate from 8.6
+GET http://localhost:3000/movies?director=James_Cameron&genre=ACTION&notFounded=true&oscar=true&basedOnBook=true&rateFrom=6.0&Limit=2
+
 ### Search with a filter of director's name, genre action, won an oscar, is based on a book and have a rate between 8.7 and 9.2
-GET http://localhost:3000/movies?director=James_Cameron&genre=ACTION&notFounded=true&oscar=true&basedOnBook=true&rateBetween=8.7-9.2
+GET http://localhost:3000/movies?director=James_Cameron&genre=ACTION&genre=ADVENTURE&notFounded=true&oscar=true&basedOnBook=true&rateBetween=8.7-9.2
 
 ### Search with a filter of director's name, genre action, won an oscar, is based on a book and have a rate between 8.4 and 9.2
 GET http://localhost:3000/movies?director=James_Cameron&genre=ACTION&notFounded=true&oscar=true&basedOnBook=true&rateBetween=8.4-9.2
@@ -150,14 +212,26 @@ GET http://localhost:3000/movies?genre=Action&format=html&more=true&page=2&limit
 ### Search with a filter of movies with pagination
 GET http://localhost:3000/movies?genre=Action&format=html&more=true&page=3&limit=4
 
-### Search with a filter of movies with pagination
+### Search withouth filters of movies
+GET http://localhost:3000/movies
+
+### Search with a filter of movies with limit
 GET http://localhost:3000/movies?&limit=1
 
-### Search with a filter of movies with pagination
+### Search with a filter of movies with limit
 GET http://localhost:3000/movies?&limit=2
 
-### Search with a filter of movies with pagination
+### Search with a filter of movies with limit
 GET http://localhost:3000/movies?&limit=5
+
+### Search with a filter of movies with pagination
+GET http://localhost:3000/movies?&limit=5&page=4
+
+### Search with a filter of movies with pagination
+GET http://localhost:3000/movies?&limit=5&page=5
+
+### Search with a filter of movies with pagination
+GET http://localhost:3000/movies?&limit=5&page=6
 
 ### Search with a filter of movies with pagination
 GET http://localhost:3000/movies?page=1
@@ -169,63 +243,7 @@ GET http://localhost:3000/movies?page=2
 GET http://localhost:3000/movies?page=3
 
 ### Search with a filter of movies with pagination
-GET http://localhost:3000/movies
+GET http://localhost:3000/movies?page=3&format=html
 
-### Search with a filter of movies with pagination
-GET http://localhost:3000/movies?page=3
-
-### Create a new movie. On the API you should be able to receive anything, the key is how the API will process the data and how they'r going to return the data. With this said: the API should not be blocked because the data they receive, not for the type of data neither because the order. In this case the "sql" key and value is ignored, it doesn't have problem
-POST http://localhost:3000/movies
-Content-Type: application/json
-
-{
-  "sql": "SELECT * FROM users",
-  "title": "The Godfather",
-  "year": 1975,
-  "director": "Francis Ford Cappola",
-  "duration": 175,
-  "poster": "https://img.fruugo.com/product/4/49/14441494_max.jpg",
-  "genre": [
-    "Crime",
-    "Drama"
-  ]
-}
-
-### Update a movie: correct
-PATCH http://localhost:3000/movies/23
-Content-Type: application/json
-
-{
-  "title":"A new better title =D",
-  "year": 2010
-}
-
-### Update a movie: incorrect. This will update what it can but not the things that are not in the schema, in this case the ID. This is like the "sql" ignore of above
-PATCH http://localhost:3000/movies/23
-Content-Type: application/json
-
-{
-  "id": "better_strong_id_0123456789",
-  "title":"Even better, yeah!",
-  "year": 2017
-}
-
-### Create a new movie wrong: should throw. A full explanation should be showed on the console
-POST http://localhost:3000/movies
-Content-Type: application/json
-
-{
-  "title": 999,
-  "year": "1975",
-  "director": true,
-  "duration": 0,
-  "poster": "https://czxczxczxc",
-  "genre": [
-    "Drama",
-    "jaajajajaj"
-  ]
-}
-
-### DELETE
-DELETE http://localhost:3000/movies/4
-Content-Type: application/json
+### Filter by other genre SQL inyection
+GET http://localhost:3000/movies?oscar='; select m.title from movie m LIMIT 2; --'

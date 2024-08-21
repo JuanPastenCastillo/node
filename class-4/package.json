@@ -1,7 +1,7 @@
 {
-  "name": "class-3",
+  "name": "class-4",
   "version": "1.0.0",
-  "description": "class-3: cors and API REST with express",
+  "description": "class-4: MVC and Deploying of API",
   "main": "app.js",
   "type": "module",
   "scripts": {

@@ -648,6 +648,41 @@
         <li><code>MySQL</code> is renowned for its reliability, scalability, and speed</li>
       </ul>
     </li>
+    <li>In order to run some <code>sql</code> scripts you can:
+      <ul>
+        <li>Run a pluggin on vscode: <a href="https://marketplace.visualstudio.com/items?itemName=cweijan.vscode-mysql-client2" target="_blank">MySQL by Weijan Chen</a>, and this is the website <a href="https://database-client.com" target="_blank">database-client.com</a></li>
+        <li>Or you can run by the <code>mySQL shell</code> following the nex steps:
+          <ol>
+            <li>
+              Reach with the terminal the desired path or know the path of your file
+            </li>
+            <li>
+              Once you get the path run this on the terminal to open the <code>mySQL Command Line Client</code>: <code>mysqlsh</code>
+            </li>
+            <li>
+              You should explicty change use the <code>sql</code> shell with <code>\sql</code>
+            </li>
+            <li>
+              Now be sure that you are connected to the actual server running <code>\c [user]@[host_name]</code>: example <code>\c root@localhost</code>. Maybe the terminal will ask you for a password
+            </li>
+            <li >
+              Run the command <code>\. [name_of_script].sql</code> and done
+            </li>
+            <li value='6'>
+                <strong>IMPORTANT:</strong> &#9889; Running the <code>sql</code> scripts this way will allow you to use the <code>SOURCE</code> command, that comes from the <code>mySQL Command Line Client</code> which will help you to upload and run other scripts files in a more efficient way
+            </li>
+          </ol>
+        </li>
+      </ul>
+      <ul>
+      </ul>
+    </li>
+    <li>Dependency Inyection
+      <ul>
+        <li>This is a <code>Design Pattern</code> to improve code efficiency eficciency, modularity, control, reusability and make the code testable. Also, the code is uncouple by design</li>
+        <li>The basic idea is: a <code>object</code>, <code>class</code> or <code>function</code> can receive their dependencies from outisde and the inner behavior change depending on how this information is provided</li>
+      </ul>
+    </li>
   </ul>
   
 </details>
