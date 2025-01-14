@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
+    <title>JMPC - Real Time Chat</title>
+    <script type="module">
+      import { io } from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js"
+
+      const form = document.getElementById("form")
+      const input = document.getElementById("input")
+      const messages = document.getElementById("messages")
+
+      const getUsername = async () => {
+        const username = localStorage.getItem("username")
+        if (username) {
+          console.log("User existed →", username, "✅")
+          return username
+        }
+
+        const fetched = await fetch(
+          "https://random-data-api.com/api/users/random_user"
+        )
+        const { username: randomUsername } = await fetched.json()
+
+        localStorage.setItem("username", randomUsername)
+        return randomUsername
+      }
+
+      const socket = io({
+        auth: {
+          username: await getUsername(),
+          theServerOffset: 0
+          /* 
+          // I understand that I can pass data from the client to the server here
+          toke: "some-security-token-writedByMe_999",
+          username: "the-user-name-writedByMe_999",
+          locationCity: "the-location-city-writedByMe_999" */
+        }
+      })
+
+      socket.on("chat message", (msg, theServerOffset, username) => {
+        console.log("msg:", msg, theServerOffset)
+        const item = `
+          <li>
+            <p>${msg}</p>
+            <small>${username}</small>
+          </li>`
+        messages.insertAdjacentHTML("beforeend", item)
+        socket.auth.serverOffset = theServerOffset
+        /** 
+         * TODO: 
+          + When the user that send the message, it should scroll to the bottom but the user that is not who sent the message, should see a tooltip showing that a new message is avalable to be readed. It should show the ammount of messages sent, 1, 2 or more> 
+          + Add the date when the message was sent
+          + Improve the UI
+          + Add complexity to the table on the backend
+          + The user should be able to set which background they want on the app
+        
+        */
+        messages.scrollTop = messages.scrollHeight
+      })
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault()
+        if (input.value) {
+          socket.emit("chat message", input.value)
+          input.value = ""
+        }
+      })
+
+      socket.on("connect", () => {
+        if (socket.recovered) {
+          console.log("recovered success! ✅, CLIENT")
+        } else {
+          console.log("recovered fail! ❌, CLIENT")
+        }
+      })
+    </script>
+    <style>
+      * {
+        min-width: 0;
+        font: inherit;
+      }
+
+      :root {
+        color-scheme: light dark;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      img,
+      video,
+      svg {
+        display: block;
+        max-width: 100%;
+        height: auto;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        display: grid;
+        place-content: center;
+        padding: 36px 36px 100px 36px;
+        grid-template-rows: 1fr;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        text-wrap: balance;
+      }
+
+      p {
+        text-wrap: pretty;
+      }
+
+      #messages {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow-y: scroll;
+        scrollbar-width: thin;
+        height: 100%;
+        scroll-behavior: smooth;
+        padding-bottom: 48px;
+      }
+
+      #messages > li {
+        padding: 0.5rem 1rem;
+      }
+
+      #messages > li:nth-child(odd) {
+        background: hsl(0, 0%, 29%);
+      }
+
+      #chat {
+        border: 2px solid white;
+        overflow: hidden;
+
+        border-radius: 8px;
+        width: 350px;
+        height: 85dvh;
+        position: relative;
+      }
+
+      div {
+        position: relative;
+      }
+
+      #form {
+        bottom: 0;
+        display: flex;
+        height: 48px;
+        left: 0;
+        padding: 4px;
+        position: absolute;
+        right: 0;
+      }
+
+      #input {
+        border-radius: 4px;
+        border: 1px solid #eee;
+        flex: 1;
+        margin: 4px;
+        padding: 0 8px;
+      }
+
+      #input:focus {
+        outline: 0;
+      }
+
+      #form > button {
+        background: #09f;
+        color: #fff;
+        border: 0;
+        margin: 4px;
+        border-radius: 4px;
+      }
+
+      #form > button:hover {
+        background: #0cf;
+      }
+
+      #author {
+        position: absolute;
+        left: -45%;
+        top: 0%;
+        bottom: 0%;
+        margin-inline: auto;
+
+        writing-mode: vertical-rl;
+        text-orientation: upright;
+
+        font-size: calc(8px * 4);
+
+        text-align: center;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 16px;
+
+        border-right: 2px solid crimson;
+        border-left: 2px solid crimson;
+
+        border-radius: 8px;
+
+        height: fit-content;
+      }
+      #author > :nth-child(2) {
+        position: relative;
+        width: 2px;
+        aspect-ratio: 1/85;
+        background-color: crimson;
+      }
+
+      @media (max-width: 650px) {
+        #author {
+          border: 2px solid crimson;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          margin-inline: unset;
+          left: 0%;
+          top: -12%;
+
+          writing-mode: horizontal-tb;
+        }
+
+        #author > :nth-child(2) {
+          display: none;
+        }
+
+        #author-title {
+          display: none;
+        }
+
+        body {
+          padding: 36px 8px 100px 8px;
+        }
+
+        #chat {
+          width: 95vw;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <h1 id="author">
+        <span>JMPC</span>
+        <div></div>
+        <span id="author-title">Real Time Chat</span>
+      </h1>
+      <section id="chat">
+        <ul id="messages"></ul>
+        <form id="form">
+          <input
+            type="text"
+            name="message"
+            id="input"
+            placeholder="Enter Message"
+            autocomplete="off" />
+          <button type="submit">Send</button>
+        </form>
+      </section>
+    </div>
+  </body>
+</html>

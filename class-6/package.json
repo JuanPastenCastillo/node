@@ -1,0 +1,20 @@
+{
+  "name": "class-4",
+  "version": "1.0.0",
+  "description": "class-6: Chat in real time with nodejs, socket.io, sql, html and css",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --env-file=.env --watch servers/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@libsql/client": "^0.14.0",
+    "express": "4.19.2",
+    "morgan": "1.10.0",
+    "socket.io": "4.7.5"
+  }
+}
