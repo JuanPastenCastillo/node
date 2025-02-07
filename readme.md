@@ -733,22 +733,83 @@
   
 </details>
 
+<details>
+  <summary>class-7: User authentication, session, cookies, JWT with Nodejs </summary>
+  <ul>
+    <li>It's recommended to use third party libraries to manage all the authentication and authorization, but it's good to know the fundamentals</li>
+    <li>Is recommended to avoid the use of <code>localStorage</code> at all cost, because: <strong>[Answer Pending]</strong>. Between all options, <code>cookies</code> are the better than <code>localStorage</code></li>
+    <li>You can use the desktop program <a href="https://yaak.app/" target="_blank">Yaak</a> to make simple requests to the server, is an alternative to <strong>postman</strong></li>
+    <li>Is it possible to use a <code>config.js</code> file to import and export all the things you need and have a more clean javascript file</li>
+    <li>In <code>Nodejs</code> version <code>20.12.0</code> you can use this approach to load your <code>.env</code> file:
 
-## NOW
-- Chat in real time with nodejs, socket.io, sql, html and css
+```js
+//.env
+PORT = 8888
 
-## Pending
-1. Learn how to make authentication and authorization
-  - Authjs
-  - Passport
-  - Clerkl
-  - Oauth 2.0
-  - NextAuth
-  - Jason Web TOkens (JWT)
-  - Redis (or similar)
-2. MongoDB:
-  - How to use it with expressjs
-  - Perform a `CRUD` with the database using mongoDB
-3. Learn how to use mongoose with express
-  - How to use it with expressjs
-  - Perform a `CRUD` with the database using mongoose
+//config.js
+import { loadEnvFile } from "node:process"
+loadEnvFile()
+export const { PORT = 3000, OTHER_VARIABLES = "DEFAULT_IF_NOT_FOUND" } = process.env
+
+//.index.js
+import { PORT } from "./config.js"
+```
+  </li>
+  <li>To work with a local databse, you can use the library <code>db-local</code></li>
+  <li>To hash the password of users, yous can use the library <code>bcrypt</code>. Here is possible to use <code>bcrypt.hashSync(password, SALT_ROUNDS)</code> and you have to be aware, the codification is expensive because cryptography is expensive (to much calculation, this mean, use the time of the computer). How to improve this you can use it with promises, like this <code>await bcrypt.hash(password, SALT_ROUNDS)</code> </li>
+  <li>When you return the data from the server to the client with the <code>login</code> endpoint you have to manage a <code>public user</code> that's going to be exposed in the client and a <code>private user</code> who is going to be used on the database. For this <code>typescript</code> is really useful</li> 
+  <li>When the data is returned to the client, in the <code>source code</code> the data can be returned <strong>explitir</strong> or <strong>implicit</strong>, this would be the approach: <strong>Remove data you don't want on a object</strong> <code>const { password: _, ...publicUser } = user</code> or you can return only the data you want <code>return { user: user.username }</code></li> 
+  <li>The important thing here is to make the hash, the validations on the server and also use <code>https</code>. You think "the client should hash before to send the data to the server" and this doesn't make sense because the server should make, again, the validation and the hash. Everything that is in the client is exposed to people and people can see what's the strategy you are using to save te data on the server. Therefore, the most important thing is the use of <code>https</code></li>
+  <li>In the Frontend is not a big deal to cover the password because, if someone have access to the frontend, you are very fucked up. A different thing is that your request is intercepted, to avoid this interception you have to use some encrypted protocols (<code>https</code>, put the attention on the final <code>s</code> at the end of <code>http</code>)</li>  
+  <li>One way to unhash some already hashed password is with brute force or with gigantic dictionaries, when someone already know a password they also known which is the hash. For example, the password <strong>012345</strong> could be, for some encrypted method, this: <strong>$2b$10$S9POdgd2JHftZPX8xqq/M.WS7JnmzIlkORGq4BQkX/.NcVniP7Jii</strong>. And you can generate those usual and knowed password to hashed and compare it. This job is already done with huge dictionaries out there. You can try a old hash generator in <a href="https://www.md5hashgenerator.com/" target="_blank" rel="noreferrer">MD5</a> and there you can see some password will generate always the same hash. Therefore, any hash method that use <strong>MD5</strong> should be avoided. In the case of use of the <strong>class-7: JWT</strong> the encrypted library <code>bcrypt</code> is used, with this the data is <strong>unintelligible</strong> and <strong>irreversible</strong> to hackers even if they know the hashing algorithm. In other words, is imposible to get the plain text hashed, like a password</li>    
+  <li>The <code>bscrypt</code> library is recommended for hashing password, unlike <code>MD5</code>, <code>SHA1</code>, <code>SHA2</code>, and <code>SHA3</code> because this others are vulnerable when it comes to password security, but it can hash large amounts of data quickly </li>
+  <li>While is true the use of <code>bscrypt</code> is good for hashing password this doesn't remove all the possible vulnerabilities, because of this users should use longer passwords thans shorter complex one</li> 
+  <li>If the <code>endpoint</code> needs some sort of state, this is, it needs to be <code>idempotent</code> you should be use some database, like <code>redis</code></li>
+  <li>
+    <code>JSON Web Tokens (JWT)</code> 
+    <ul>
+      <li>
+        The technology <code>JWT</code> can be use not only for the session of the user. This can be used to securely communicate and exchange data between two parties without the need for state. The token can then store that data. This allow to <strong>encode</strong>, <strong>decode</strong> and <strong>verify</strong> that the person or system is who they say they are 
+      </li>
+      <li>
+        Parts of <code>JWT</code> are:
+        <ul>
+          <li>
+            <strong>Header</strong>: contains the type of token and the algorithm.
+          </li>
+          <li>
+            <strong>Payload</strong>: data completely encoded
+          </li>
+          <li>
+            <strong>Signature</strong>, <strong>verify signature</strong> or <strong>footer</strong>: this part allow you to decode the token. Also, here you have to choose a "secret-word". This word should be come from a environmental variable. This is very very important. If the "secret-word" gets exposed everything is exposed
+          </li>
+        </ul>
+      </li>
+      <li>The idea is not to send all the data of the user in the token because the longer the payload, the longer the token</li>
+      <li>In this class we are going to use the <code>JWT</code> to authentication without a state, a session on database. It allows you to have all the important information in the same token: when the token expire, which user is with the session initiated. This is very highly scalable, the database needed for this don't being huge. It have inter operativity (work in different languages, different platforms, different devices), is a open standard, works in any place, allow you to have security </li> 
+      <li>In the a real world application the <code>JWT</code> should not be used in a <code>localStorage</code>, <code>sessionStorage</code> or any related thing. The <code>JWT</code> should be in a <code>cookie</code>, why? Because <code>cookies</code>:
+        <ol>
+          <li>Are a little bit more secure </li> 
+          <li>Have less vulnerable to <strong>cross-site scripting</strong> attacks then <code>localStorage</code> or <code>sessionStorage</code>. To be fear, the plugins of the browsers can have access to your <code>cookies</code> and re write it. So, bear that in mind. So, is not 100% secure but is a one more layer of defense</li> 
+          <li>Have a time of expiration. This is different from the alternatives of the <code>localStorage</code> and <code>sessionStorage</code>. You can emulate the expiration time on those other local options</li>
+          <li>Can be configured to be sended through <code>https</code>. This allow for <code>encoded</code> and <code>authentifaction</code> of transmited data. This reduce the risk of the attack of <strong>the man in the middle</strong>, this is someone who intercept the message</li> 
+          <li>Can be configured to be sended to domains that are only yours</li>
+          <li>Make you less vulnerable to the <strong>Cross-Site Request Forgery</strong> or <strong>CSRF</strong></li>
+          <li>Is easier to manage than <code>localStorage</code> and <code>sessionStorage</code> because the user doesn't have the responsability to manage the <strong>token</strong> anymore. You do this though the server. With this the interoperativity in different services are easier</li>
+          <li>Finally, <code>cookies</code> are no perfect but are more secure than <code>localStorage</code> and <code>sessionStorage</code></li>
+        </ol>
+         </li>
+         <li>The <strong>refresh token</strong> is not in this class. This <strong>refresh token</strong> is used primary in the client side, is not sended at any place </li>
+    </ul>
+  </li>
+  
+  
+  
+  </ul>
+  
+  
+  </details>
+
+
+
+
