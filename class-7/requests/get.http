@@ -1,0 +1,6 @@
+### Data on root, home route
+GET http://localhost:8888/
+
+
+### Data on protected route
+GET http://localhost:8888/protected

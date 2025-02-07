@@ -1,0 +1,42 @@
+[
+  {
+    "_id": "a7cfd6d4-474d-4c00-be2a-24a82a61bcec",
+    "username": "jmpc",
+    "password": "$2b$10$SfZAcuuFTmza2YMFS896QuRId4aGAD/i7qlfkFxhF5uR2LObLWaTm"
+  },
+  {
+    "_id": "3c5e557c-5558-4ff3-930a-ef9251812459",
+    "username": "Working",
+    "password": "$2b$10$JgijXG3oxhoe.U9tbcxJKu8ZScYmShBaDw/Lfck4ag/wL/1ql2hCW"
+  },
+  {
+    "_id": "acf4b35b-2269-4625-b25b-dbea4c4ac939",
+    "username": "Hashed4",
+    "password": "$2b$10$lzDkhlM2mygjJTIOE6IY1OETCjrOwxXIWnK/rzpTXdNjRhIDE71J6"
+  },
+  {
+    "_id": "3ad08752-b0ab-4302-b39b-85d01fb282b2",
+    "username": "Hashed3",
+    "password": "$2b$10$840/z1Ua9q5un2VrvRx1L.lFN.4U31A9K8ojaAxiVqj3BJcJF7E46"
+  },
+  {
+    "_id": "9c7a0195-3823-4301-bc7c-b42f9d65e3a6",
+    "username": "Hashed2",
+    "password": "$2b$10$BFmt..JRqdgCct.r8E1QW.QNXM8XF/KnGq3CxPMDszdhRpmzMXYka"
+  },
+  {
+    "_id": "dc468359-3488-4beb-9730-e98e0d2164e6",
+    "username": "Hashed",
+    "password": "$2b$10$Fjh9GmAjI0CKf7/v5bQm6OI7SNZruXkXlhl8gOjn5OpdYBX.J9Shy"
+  },
+  {
+    "_id": "6af8bffc-d3a8-4440-8a39-e068a08c38c6",
+    "username": "Now is hashed?",
+    "password": "$2b$10$S9POdgd2JHftZPX8xqq/M.WS7JnmzIlkORGq4BQkX/.NcVniP7Jii"
+  },
+  {
+    "_id": "36395b2b-e0aa-42df-925c-7a5c4a67b8e9",
+    "username": "username on Yaak",
+    "password": "012345"
+  }
+]

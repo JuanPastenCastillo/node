@@ -1,0 +1,41 @@
+### Data on login route
+POST http://localhost:8888/login
+Content-Type: application/json
+
+{
+  "username": "Hashed",
+  "password": "012345"
+}
+
+### Data on register route
+POST http://localhost:8888/register
+Content-Type: application/json
+
+{
+  "username": "Hashed2",
+  "password": "012345"
+}
+
+### Data on register route
+POST http://localhost:8888/register
+Content-Type: application/json
+
+{
+  "username": "Hashed3",
+  "password": "012345"
+}
+
+### Data on register route
+POST http://localhost:8888/register
+Content-Type: application/json
+
+{
+  "username": "Hashed4",
+  "password": "012345"
+}
+
+### Data on logout route
+POST http://localhost:8888/logout
+Content-Type: application/json
+
+{}
